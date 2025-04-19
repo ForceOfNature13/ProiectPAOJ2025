@@ -1,0 +1,77 @@
+package model;
+
+import exceptie.LimitaDepasitaExceptie;
+import exceptie.TipLimita;
+
+import java.util.*;
+
+public class RezervarePublicatie {
+    private final int idPublicatie;
+    private final Queue<Cititor> coadaAsteptare;
+    private final int limitaMaxCoada;
+
+    public RezervarePublicatie(int idPublicatie, int limitaMaxCoada) {
+        this.idPublicatie = idPublicatie;
+        this.limitaMaxCoada = limitaMaxCoada;
+        this.coadaAsteptare = new LinkedList<>();
+    }
+
+    public void adaugaInCoada(Cititor cititor) throws LimitaDepasitaExceptie {
+        int curent = coadaAsteptare.size();
+        if (curent >= limitaMaxCoada) {
+            throw new LimitaDepasitaExceptie(
+                    TipLimita.COADA_REZERVARE,
+                    curent,
+                    limitaMaxCoada
+            );
+        }
+        coadaAsteptare.offer(cititor);
+    }
+
+    public Cititor extrageUrmatorul() {
+        return coadaAsteptare.poll();
+    }
+
+    public Cititor vizualizeazaUrmatorul() {
+        return coadaAsteptare.peek();
+    }
+
+    public boolean esteGoala() {
+        return coadaAsteptare.isEmpty();
+    }
+
+    public Queue<Cititor> getCoadaAsteptare() {
+        return Collections.unmodifiableCollection(coadaAsteptare) instanceof Queue
+                ? (Queue<Cititor>) Collections.unmodifiableCollection(coadaAsteptare)
+                : null;
+    }
+
+    public int getIdPublicatie() {
+        return idPublicatie;
+    }
+
+    public int getLimitaMaxCoada() {
+        return limitaMaxCoada;
+    }
+
+    @Override
+    public String toString() {
+        return "RezervarePublicatie:\n" +
+                "IdPublicatie: " + idPublicatie + "\n" +
+                "Dimensiune coada: " + coadaAsteptare.size() + "\n" +
+                "Limita coada: " + limitaMaxCoada + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RezervarePublicatie that = (RezervarePublicatie) o;
+        return idPublicatie == that.idPublicatie;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idPublicatie);
+    }
+}
