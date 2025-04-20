@@ -1,115 +1,125 @@
-Definirea sistemului – SmartLibrary
+## Definirea sistemului – SmartLibrary
 
-Actiuni si interogari:
+### 📋 Actiuni si interogari:
 
-1.Listare toate publicatiile – afiseaza fiecare titlu din colectie.
+1. 📚 Listare toate publicatiile  
+   Afiseaza fiecare titlu din colectie.
 
-2.Cautare publicatie dupa titlu – filtreaza dupa sir introdus de utilizator.
+2. 🔍 Cautare publicatie dupa titlu  
+   Filtreaza dupa sir introdus de utilizator.
 
-3.Cautare publicatie dupa autor – returneaza titlurile scrise de un autor dat.
+3. 🖋️ Cautare publicatie dupa autor  
+   Returneaza titlurile scrise de un autor dat.
 
-4.Cautare publicatie dupa categorie – afiseaza toate publicatiile dintr‑o categorie.
+4. 🗂️ Cautare publicatie dupa categorie  
+   Afiseaza toate publicatiile dintr‑o categorie.
 
-5.Cautare publicatie dupa interval de ani – selecteaza titlurile publicate intre doi ani indicati.
+5. ⏳ Cautare publicatie dupa interval de ani  
+   Selecteaza titlurile publicate intre doi ani indicati.
 
-6.Cautare publicatie dupa disponibilitate – listeaza doar titlurile libere ori cele imprumutate.
+6. 🚦 Cautare publicatie dupa disponibilitate  
+   Listeaza doar titlurile libere ori cele imprumutate.
 
-7.Cautare complexa cu sortare multipla – combina filtre si ordoneaza dupa an rating numar de imprumuturi sau titlu.
+7. 🧮 Cautare complexa cu sortare multipla  
+   Combina filtre si ordoneaza dupa an, rating, numar de imprumuturi sau titlu.
 
-8.Sortare dupa anul publicarii – ordoneaza descrescator toate publicatiile.
+8. 🗓️ Sortare dupa anul publicarii  
+   Ordoneaza descrescator toate publicatiile.
 
-9.Sortare dupa rating mediu – ordoneaza descrescator pe baza mediilor recenziilor.
+9. ⭐ Sortare dupa rating mediu  
+   Ordoneaza descrescator pe baza mediilor recenziilor.
 
-10.Sortare dupa numar de imprumuturi – ordoneaza descrescator dupa popularitate.
+10. 🔢 Sortare dupa numar de imprumuturi  
+    Ordoneaza descrescator dupa popularitate.
 
-11.Sortare dupa titlu – ordoneaza alfabetic toate publicatiile.
+11. 🔠 Sortare dupa titlu  
+    Ordoneaza alfabetic toate publicatiile.
 
-12.Imprumuta publicatie – creeaza un obiect Imprumut si marcheaza titlul ca indisponibil.
+12. 📥 Imprumuta publicatie  
+    Creeaza un obiect Imprumut si marcheaza titlul ca indisponibil.
 
-13.Returneaza publicatie – finalizeaza imprumutul elibereaza titlul si calculeaza penalizari.
+13. 📤 Returneaza publicatie  
+    Finalizeaza imprumutul, elibereaza titlul si calculeaza penalizari.
 
-14.Rezerva publicatie – adauga cititorul in coada de asteptare a publicatiei.
+14. ⏳ Rezerva publicatie  
+    Adauga cititorul in coada de asteptare a publicatiei.
 
-15.Reinnoieste imprumut – prelungeste data scadenta cu o perioada suplimentara.
+15. 🔄 Reinnoieste imprumut  
+    Prelungeste data scadenta cu o perioada suplimentara.
 
-16.Adauga recenzie la publicatie – salveaza un rating de la unu la cinci si un comentariu.
+16. 📝 Adauga recenzie la publicatie  
+    Salveaza un rating de la unu la cinci si un comentariu.
 
-17.Afiseaza recenziile unei publicatii – listeaza toate recenziile si calculeaza ratingul mediu.
+17. 👀 Afiseaza recenziile unei publicatii  
+    Listeaza toate recenziile si calculeaza ratingul mediu.
 
-18.Listare evenimente – afiseaza toate evenimentele literare programate.
+18. 📅 Listare evenimente  
+    Afiseaza toate evenimentele literare programate.
 
-19.Inscriere la eveniment – adauga cititorul in lista participantilor.
+19. 🏷️ Inscriere la eveniment  
+    Adauga cititorul in lista participantilor.
 
-20.Vizualizare imprumuturi active – afiseaza imprumuturile curente ale cititorului.
+20. 📑 Vizualizare imprumuturi active  
+    Afiseaza imprumuturile curente ale cititorului.
 
-21.Vizualizare istoric imprumuturi – afiseaza imprumuturile finalizate.
+21. 🗄️ Vizualizare istoric imprumuturi  
+    Afiseaza imprumuturile finalizate.
 
-22.Vizualizare penalizari – arata suma totala a amenzilor datorate.
+22. 💰 Vizualizare penalizari  
+    Afiseaza suma totala a amenzilor datorate.
 
-23.Adauga publicatie – bibliotecarul creeaza o noua:carte,revista sau audiobook.
+23. ➕ Adauga publicatie  
+    Bibliotecarul creeaza o carte, revista sau audiobook nou.
 
-24.Sterge publicatie – bibliotecarul elimina o publicatie dupa ID.
+24. ❌ Sterge publicatie  
+    Bibliotecarul elimina o publicatie dupa ID.
 
-25.Creeaza eveniment – administratorul adauga un nou eveniment in calendar.
+25. ✨ Creeaza eveniment  
+    Administratorul adauga un eveniment nou in calendar.
 
-26.Sterge eveniment – administratorul elimina un eveniment existent.
+26. 🗑️ Sterge eveniment  
+    Administratorul elimina un eveniment existent.
 
-27.Inregistrare cititor – salveaza datele si credentialele unui cititor nou.
+27. 🆕 Inregistrare cititor  
+    Salveaza datele si credentialele unui cititor nou.
 
-28.Autentificare – valideaza username si parola si seteaza utilizatorul curent.
+28. 🔐 Autentificare  
+    Valideaza username si parola si seteaza utilizatorul curent.
 
-29.Deconectare – sterge sesiunea utilizatorului curent.
+29. 🚪 Deconectare  
+    Sterge sesiunea utilizatorului curent.
 
-Tipuri de obiecte:
+---
 
-1.Carte – publicatie tiparita identificata prin ISBN si editura.
+### 🧩 Tipuri de obiecte:
 
-2.Revista – publicatie periodica definita prin frecventa si numar.
+- 📗 Carte – publicatie tiparita identificata prin ISBN si editura.
+- 📰 Revista – publicatie periodica definita prin frecventa si numar.
+- 🎧 Audiobook – publicatie audio descrisa prin durata, naratori si format.
+- 🏷️ Publicatie – clasa abstracta cu atribute comune tuturor titlurilor.
+- 🙋 Cititor – utilizator final cu imprumuturi, penalizari si recenzii.
+- 👩‍💼 Bibliotecar – angajat al bibliotecii cu rol STAFF sau ADMIN.
+- 🔄 Imprumut – legatura intre un cititor si o publicatie, cu date de imprumut si returnare.
+- ⏳ RezervarePublicatie – coada de cititori care asteapta un titlu indisponibil.
+- 📆 Eveniment – activitate culturala cu data, locatie si capacitate maxima.
+- ⭐ Recenzie – evaluare numerica si comentariu pentru o publicatie.
+- 🏢 Editura – entitate cu nume si tara editurii unei carti.
+- 🧑 Persoana – superclasa abstracta pentru Cititor si Bibliotecar.
+- 🛡️ RolBibliotecar – enumeratie cu valorile STAFF si ADMIN.
+- 🔑 AuthService – serviciu singleton pentru autentificare si sesiuni.
 
-3.Audiobook – publicatie audio descrisa prin durata naratori si format. 
+---
 
-4.Publicatie – clasa abstracta cu atribute comune tuturor titlurilor.
+### 🛠️ Structuri de date si concepte cheie:
 
-5.Cititor – utilizator final care detine imprumuturi penalizari si recenzii.
-
-6.Bibliotecar – angajat al bibliotecii cu rol STAFF sau ADMIN.
-
-7.Imprumut – legatura intre un cititor si o publicatie cu date de imprumut si returnare.
-
-8.RezervarePublicatie – coada de cititori care asteapta o publicatie. 
-
-9.Eveniment – activitate culturala cu data locatie si capacitate maxima. 
-
-10.Recenzie – evaluare numerica si comentariu asociate unei publicatii.
-
-11.Editura – entitate cu nume si tara editurii unei carti. 
-
-12.Persoana – superclasa abstracta pentru Cititor si Bibliotecar.
-
-13.RolBibliotecar – enumeratie cu valorile STAFF si ADMIN.
-
-14.AuthService – serviciu singleton care gestioneaza autentificarea si sesiunile. 
-
-Structuri de date si concepte cheie:
-
-1.Colections folosite: List ArrayList Map HashMap Set TreeSet Queue LinkedList ​BibliotecaService
-
-2.Stream API cu filter map sorted pentru cautari si sortari fluente ​BibliotecaService
-
-3.Comparatoare dedicate pentru an rating numar de imprumuturi titlu ​BibliotecaService
-
-4.Record pentru Editura care ofera imutabilitate compacta ​Editura
-
-5.Enum RolBibliotecar pentru controlul drepturilor de acces ​RolBibliotecar
-
-6.Clase abstracte Publicatie si Persoana pentru mostenire si reutilizare cod
-
-7.Interfata Imprumutabil pentru polimorfism la imprumut returnare durata maxima ​Imprumutabil
-
-8.Clase singleton pentru logica de business BibliotecaService EvenimentService AuthService
-
-9.Exceptii personalizate pentru validari AccesInterzis ResursaIndisponibila LimitaDepasita etc
-
-10.Tipuri de data din java time LocalDate si LocalDateTime folosite la imprumuturi si evenimente
-
-11.Generatoare de ID statice in fiecare entitate pentru identificare unica
+- 📂 Colections: ArrayList, HashMap, TreeSet, LinkedList (Queue).
+- 🚀 Stream API: filter, map, sorted pentru cautari si sortari fluente.
+- 🧩 Comparatoare: clase dedicate pentru an, rating, numar de imprumuturi, titlu.
+- 📝 Record: Editura este definita ca record imutabil.
+- 🏷️ Enum: RolBibliotecar pentru controlul drepturilor.
+- 🏛️ Mostenire: Publicatie si Persoana sunt clase abstracte reutilizate.
+- 🔗 Interfata: Imprumutabil pentru polimorfism la imprumut si returnare.
+- ♾️ Singleton: serviciile BibliotecaService, EvenimentService, AuthService.
+- ⚠️ Exceptii personalizate: AccesInterzis, ResursaIndisponibila, LimitaDepasita etc.
+- ⏰ Tipuri de data java.time: LocalDate si LocalDateTime pentru imprumuturi si evenimente.
+- 🆔 Generatoare de ID statice: in fiecare entitate pentru identificare unica.
