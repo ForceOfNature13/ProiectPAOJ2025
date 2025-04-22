@@ -1,125 +1,108 @@
-## Definirea sistemului – SmartLibrary
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLibrary · Prezentare</title>
+  <style>
+    body { background:#0d1117; color:#c9d1d9; font-family:'Segoe UI',sans-serif; margin:0; padding:2rem; }
+    h1 { color:#58a6ff; font-size:2.5rem; margin-bottom:0.5rem; }
+    p.subtitle { color:#c9d1d9; font-size:1.1rem; margin-bottom:2rem; }
+    details { background:#161b22; padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
+    summary { cursor:pointer; font-size:1.25rem; font-weight:bold; }
+    summary::marker { font-size:1.25rem; }
+    ul, ol, table { margin-top:0.5rem; }
+    ul li, ol li { margin-bottom:0.5rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { border:1px solid #30363d; padding:0.75rem; text-align:left; }
+    th { background:#30363d; }
+  </style>
+</head>
+<body>
+  <h1>🏛️ SmartLibrary</h1>
+  <p class="subtitle">Soluție modernă pentru management inteligent al bibliotecii, construită cu Java 21 și design scalabil pentru orice dimensiune de colecție.</p>
 
-### 📋 Actiuni si interogari:
+  <details open>
+    <summary>📌 Detalii proiect</summary>
+    <p>📖 SmartLibrary revoluționează modul în care bibliotecile operează, oferind o soluție completă pentru catalogare inteligentă, împrumuturi rapide, gestionarea cozii de rezervări și organizarea de evenimente culturale, toate pe o bază modernă Java 21 și arhitectură scalabilă.</p>
+    <ul>
+      <li>📚 <strong>29 CLI</strong> – comenzi pentru gestionare completă a bibliotecii</li>
+      <li>☕ <strong>Java 21</strong> – Records · switch‑expressions · Stream API</li>
+      <li>🛡️ <strong>Audit Async</strong> – EventBus → AuditService (thread dedicat)</li>
+      <li>🏫 <strong>User‑centric</strong> – cozi rezervare · penalizări automate · roluri STAFF/ADMIN</li>
+    </ul>
+  </details>
 
-1. 📚 Listare toate publicatiile  
-   Afiseaza fiecare titlu din colectie.
+  <details>
+    <summary>📋 Comenzi CLI</summary>
+    <ol>
+      <li>📚 Listare publicații</li>
+      <li>🔍 Căutare după titlu</li>
+      <li>✍️ Căutare după autor</li>
+      <li>🗂️ Căutare după categorie</li>
+      <li>⏳ Căutare după interval de ani</li>
+      <li>🚦 Căutare după disponibilitate</li>
+      <li>🧮 Căutare complexă + sortare multiplă</li>
+      <li>🗓️ Sortare după anul publicării</li>
+      <li>⭐ Sortare după rating</li>
+      <li>🔢 Sortare după nr. de împrumuturi</li>
+      <li>🔠 Sortare alfabetică</li>
+      <li>📥 Împrumută publicație</li>
+      <li>📤 Returnează publicație + penalizare</li>
+      <li>📌 Rezervă publicație (FIFO)</li>
+      <li>🔄 Reînnoiește împrumut</li>
+      <li>📝 Adaugă recenzie</li>
+      <li>👀 Vezi recenzii + rating mediu</li>
+      <li>📅 Listare evenimente</li>
+      <li>🏷️ Înscriere la eveniment</li>
+      <li>📑 Vizualizare împrumuturi active</li>
+      <li>📂 Istoric împrumuturi</li>
+      <li>💰 Vizualizare penalizări</li>
+      <li>➕ Adaugă publicație</li>
+      <li>❌ Șterge publicație</li>
+      <li>✨ Creează eveniment</li>
+      <li>🗑️ Șterge eveniment</li>
+      <li>🔒 Blochează utilizator</li>
+      <li>🔓 Deblochează utilizator</li>
+      <li>👩‍💼 Adaugă bibliotecar STAFF</li>
+    </ol>
+  </details>
 
-2. 🔍 Cautare publicatie dupa titlu  
-   Filtreaza dupa sir introdus de utilizator.
+  <details>
+    <summary>🧩 Model de domeniu</summary>
+    <table>
+      <thead>
+        <tr><th>Entitate</th><th>Descriere</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>📗 Carte</td><td>ISBN · Editură · Categorie</td></tr>
+        <tr><td>📰 Revistă</td><td>Frecvență · Număr</td></tr>
+        <tr><td>🎧 Audiobook</td><td>Durată · Naratori · Format</td></tr>
+        <tr><td>🏷️ Publicație</td><td>Abstractă, atribute comune</td></tr>
+        <tr><td>🙋 Cititor</td><td>Împrumuturi · Recenzii · Penalizări</td></tr>
+        <tr><td>👩‍💼 Bibliotecar</td><td>Rol STAFF / ADMIN</td></tr>
+        <tr><td>🔄 Împrumut</td><td>Date împrumut / returnare</td></tr>
+        <tr><td>⏳ RezervarePublicatie</td><td>Coadă FIFO</td></tr>
+        <tr><td>📆 Eveniment</td><td>Dată · Locație · Capacitate</td></tr>
+        <tr><td>⭐ Recenzie</td><td>Rating ★ + Comentariu</td></tr>
+        <tr><td>🏢 Editura</td><td>Record imutabil (`record`)</td></tr>
+        <tr><td>🧑 Persoană</td><td>Abstractă (bază utilizatori)</td></tr>
+        <tr><td>🛡️ RolBibliotecar</td><td>Enum STAFF, ADMIN</td></tr>
+      </tbody>
+    </table>
+  </details>
 
-3. 🖋️ Cautare publicatie dupa autor  
-   Returneaza titlurile scrise de un autor dat.
-
-4. 🗂️ Cautare publicatie dupa categorie  
-   Afiseaza toate publicatiile dintr‑o categorie.
-
-5. ⏳ Cautare publicatie dupa interval de ani  
-   Selecteaza titlurile publicate intre doi ani indicati.
-
-6. 🚦 Cautare publicatie dupa disponibilitate  
-   Listeaza doar titlurile libere ori cele imprumutate.
-
-7. 🧮 Cautare complexa cu sortare multipla  
-   Combina filtre si ordoneaza dupa an, rating, numar de imprumuturi sau titlu.
-
-8. 🗓️ Sortare dupa anul publicarii  
-   Ordoneaza descrescator toate publicatiile.
-
-9. ⭐ Sortare dupa rating mediu  
-   Ordoneaza descrescator pe baza mediilor recenziilor.
-
-10. 🔢 Sortare dupa numar de imprumuturi  
-    Ordoneaza descrescator dupa popularitate.
-
-11. 🔠 Sortare dupa titlu  
-    Ordoneaza alfabetic toate publicatiile.
-
-12. 📥 Imprumuta publicatie  
-    Creeaza un obiect Imprumut si marcheaza titlul ca indisponibil.
-
-13. 📤 Returneaza publicatie  
-    Finalizeaza imprumutul, elibereaza titlul si calculeaza penalizari.
-
-14. ⏳ Rezerva publicatie  
-    Adauga cititorul in coada de asteptare a publicatiei.
-
-15. 🔄 Reinnoieste imprumut  
-    Prelungeste data scadenta cu o perioada suplimentara.
-
-16. 📝 Adauga recenzie la publicatie  
-    Salveaza un rating de la unu la cinci si un comentariu.
-
-17. 👀 Afiseaza recenziile unei publicatii  
-    Listeaza toate recenziile si calculeaza ratingul mediu.
-
-18. 📅 Listare evenimente  
-    Afiseaza toate evenimentele literare programate.
-
-19. 🏷️ Inscriere la eveniment  
-    Adauga cititorul in lista participantilor.
-
-20. 📑 Vizualizare imprumuturi active  
-    Afiseaza imprumuturile curente ale cititorului.
-
-21. 🗄️ Vizualizare istoric imprumuturi  
-    Afiseaza imprumuturile finalizate.
-
-22. 💰 Vizualizare penalizari  
-    Afiseaza suma totala a amenzilor datorate.
-
-23. ➕ Adauga publicatie  
-    Bibliotecarul creeaza o carte, revista sau audiobook nou.
-
-24. ❌ Sterge publicatie  
-    Bibliotecarul elimina o publicatie dupa ID.
-
-25. ✨ Creeaza eveniment  
-    Administratorul adauga un eveniment nou in calendar.
-
-26. 🗑️ Sterge eveniment  
-    Administratorul elimina un eveniment existent.
-
-27. 🆕 Inregistrare cititor  
-    Salveaza datele si credentialele unui cititor nou.
-
-28. 🔐 Autentificare  
-    Valideaza username si parola si seteaza utilizatorul curent.
-
-29. 🚪 Deconectare  
-    Sterge sesiunea utilizatorului curent.
-
----
-
-### 🧩 Tipuri de obiecte:
-
-- 📗 Carte – publicatie tiparita identificata prin ISBN si editura.
-- 📰 Revista – publicatie periodica definita prin frecventa si numar.
-- 🎧 Audiobook – publicatie audio descrisa prin durata, naratori si format.
-- 🏷️ Publicatie – clasa abstracta cu atribute comune tuturor titlurilor.
-- 🙋 Cititor – utilizator final cu imprumuturi, penalizari si recenzii.
-- 👩‍💼 Bibliotecar – angajat al bibliotecii cu rol STAFF sau ADMIN.
-- 🔄 Imprumut – legatura intre un cititor si o publicatie, cu date de imprumut si returnare.
-- ⏳ RezervarePublicatie – coada de cititori care asteapta un titlu indisponibil.
-- 📆 Eveniment – activitate culturala cu data, locatie si capacitate maxima.
-- ⭐ Recenzie – evaluare numerica si comentariu pentru o publicatie.
-- 🏢 Editura – entitate cu nume si tara editurii unei carti.
-- 🧑 Persoana – superclasa abstracta pentru Cititor si Bibliotecar.
-- 🛡️ RolBibliotecar – enumeratie cu valorile STAFF si ADMIN.
-- 🔑 AuthService – serviciu singleton pentru autentificare si sesiuni.
-
----
-
-### 🛠️ Structuri de date si concepte cheie:
-
-- 📂 Colections: ArrayList, HashMap, TreeSet, LinkedList (Queue).
-- 🚀 Stream API: filter, map, sorted pentru cautari si sortari fluente.
-- 🧩 Comparatoare: clase dedicate pentru an, rating, numar de imprumuturi, titlu.
-- 📝 Record: Editura este definita ca record imutabil.
-- 🏷️ Enum: RolBibliotecar pentru controlul drepturilor.
-- 🏛️ Mostenire: Publicatie si Persoana sunt clase abstracte reutilizate.
-- 🔗 Interfata: Imprumutabil pentru polimorfism la imprumut si returnare.
-- ♾️ Singleton: serviciile BibliotecaService, EvenimentService, AuthService.
-- ⚠️ Exceptii personalizate: AccesInterzis, ResursaIndisponibila, LimitaDepasita etc.
-- ⏰ Tipuri de data java.time: LocalDate si LocalDateTime pentru imprumuturi si evenimente.
-- 🆔 Generatoare de ID statice: in fiecare entitate pentru identificare unica.
+  <details>
+    <summary>🔨 Pattern-uri</summary>
+    <ul>
+      <li>⚙️ Singleton – BibliotecaService, AuthService, EvenimentService, AuditService, EventBus</li>
+      <li>🏭 Factory – CarteFactory, RevistaFactory, AudiobookFactory</li>
+      <li>🔧 Builder – CititorBuilder, BibliotecarBuilder, EvenimentBuilder</li>
+      <li>🎯 Strategy – SortContext + comparatoare runtime</li>
+      <li>🔗 Chain of Responsibility – LimitaImprumuturiHandler → … → CoadaRezervariPlinaHandler</li>
+      <li>👁️ Observer – EventBus → AuditService</li>
+      <li>📦 DTO – PublicatieDTO</li>
+    </ul>
+  </details>
+</body>
+</html>
