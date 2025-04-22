@@ -7,9 +7,9 @@ public class Imprumut {
     private static int idGenerator = 0;
 
     private int id;
-    private int idPublicatie;
-    private int idCititor;
-    private LocalDate dataImprumut;
+    private final int idPublicatie;
+    private final int idCititor;
+    private final LocalDate dataImprumut;
     private LocalDate dataScadenta;
     private LocalDate dataReturnare;
 
@@ -51,26 +51,6 @@ public class Imprumut {
         return this.idPublicatie;
     }
 
-    public void setIdPublicatie(int idPublicatie) {
-        this.idPublicatie = idPublicatie;
-    }
-
-    public int getIdCititor() {
-        return this.idCititor;
-    }
-
-    public void setIdCititor(int idCititor) {
-        this.idCititor = idCititor;
-    }
-
-    public LocalDate getDataImprumut() {
-        return this.dataImprumut;
-    }
-
-    public void setDataImprumut(LocalDate dataImprumut) {
-        this.dataImprumut = dataImprumut;
-    }
-
     public LocalDate getDataScadenta() {
         return this.dataScadenta;
     }
@@ -95,16 +75,8 @@ public class Imprumut {
         this.numarReinnoiri = numarReinnoiri;
     }
 
-    public double getPenalitate() {
-        return this.penalitate;
-    }
-
     public void setPenalitate(double penalitate) {
         this.penalitate = penalitate;
-    }
-
-    public boolean esteIntarziat() {
-        return this.dataReturnare == null && this.dataScadenta.isBefore(LocalDate.now());
     }
 
     @Override

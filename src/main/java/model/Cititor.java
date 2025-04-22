@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Cititor extends Persoana {
-    private List<Imprumut> listaImprumuturiActive;
-    private List<Imprumut> istoric;
-    private String adresa;
+    private final List<Imprumut> listaImprumuturiActive;
+    private final List<Imprumut> istoric;
+    private final String adresa;
     private double sumaPenalizari;
-    private int nrMaxImprumuturi;
+    private final int nrMaxImprumuturi;
 
     public Cititor(String nume,
                    String prenume,
@@ -37,16 +37,6 @@ public class Cititor extends Persoana {
             throw new IllegalArgumentException("Penalizarea nu poate fi negativa.");
         }
         this.sumaPenalizari += penalizare;
-    }
-
-    public void platestePenalizare(double suma) {
-        if (suma <= 0) {
-            throw new IllegalArgumentException("Suma de plata trebuie sa fie pozitiva.");
-        }
-        this.sumaPenalizari -= suma;
-        if (this.sumaPenalizari < 0) {
-            this.sumaPenalizari = 0;
-        }
     }
 
     public double getSumaPenalizari() {
@@ -78,28 +68,8 @@ public class Cititor extends Persoana {
         return Collections.unmodifiableList(this.istoric);
     }
 
-    public void setIstoric(List<Imprumut> istoric) {
-        this.istoric = istoric;
-    }
-
-    // adresa
-    public String getAdresa() {
-        return this.adresa;
-    }
-
-    public void setAdresa(String adresa) {
-        if (adresa == null || adresa.isBlank()) {
-            throw new IllegalArgumentException("Adresa nu poate fi goala.");
-        }
-        this.adresa = adresa;
-    }
-
     public int getNrMaxImprumuturi() {
         return this.nrMaxImprumuturi;
-    }
-
-    public void setNrMaxImprumuturi(int nrMaxImprumuturi) {
-        this.nrMaxImprumuturi = nrMaxImprumuturi;
     }
 
     public void adaugaInIstoric(Imprumut imprumut) {

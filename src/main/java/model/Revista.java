@@ -6,8 +6,8 @@ import exceptie.ResursaIndisponibilaExceptie;
 import java.util.List;
 
 public class Revista extends Publicatie implements Imprumutabil {
-    private String frecventaAparitie;
-    private int numar;
+    private final String frecventaAparitie;
+    private final int numar;
 
     public Revista(String titlu,
                    int anPublicare,
@@ -24,20 +24,6 @@ public class Revista extends Publicatie implements Imprumutabil {
         this.numar = numar;
     }
 
-    @Override
-    public void afiseazaInfo() {
-        System.out.println("Revista:");
-        System.out.println("Id: " + this.getId());
-        System.out.println("Titlu: " + this.getTitlu());
-        System.out.println("An publicare: " + this.getAnPublicare());
-        System.out.println("Nr pagini: " + this.getNrPagini());
-        System.out.println("Disponibil: " + this.isDisponibil());
-        System.out.println("Nr imprumuturi: " + this.getNrImprumuturi());
-        System.out.println("Frecventa aparitie: " + this.getFrecventaAparitie());
-        System.out.println("Numar: " + this.getNumar());
-        System.out.println("Categorie: " + this.getCategorie());
-
-    }
     @Override
     public void imprumuta() throws ResursaIndisponibilaExceptie {
         if (!this.isDisponibil()) {
@@ -60,20 +46,15 @@ public class Revista extends Publicatie implements Imprumutabil {
         return 7;
     }
 
+    @Override
+    public double penalizarePeZi() { return 2.0; }
+
     public String getFrecventaAparitie() {
         return this.frecventaAparitie;
     }
 
-    public void setFrecventaAparitie(String frecventaAparitie) {
-        this.frecventaAparitie = frecventaAparitie;
-    }
-
     public int getNumar() {
         return this.numar;
-    }
-
-    public void setNumar(int numar) {
-        this.numar = numar;
     }
 
     @Override
@@ -83,4 +64,5 @@ public class Revista extends Publicatie implements Imprumutabil {
                 + "Frecventa aparitie: " + this.getFrecventaAparitie() + "\n"
                 + "Numar: " + this.getNumar() + "\n";
     }
+
 }

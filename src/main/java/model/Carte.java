@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Carte extends Publicatie implements Imprumutabil {
 
-    private String ISBN;
-    private Editura editura;
+    private final String ISBN;
+    private final Editura editura;
 
     public Carte(String titlu, int anPublicare, int nrPagini, boolean disponibil,
                  List<Recenzie> listaRecenzii,
@@ -20,22 +20,6 @@ public class Carte extends Publicatie implements Imprumutabil {
         super(titlu, anPublicare, nrPagini, disponibil, listaRecenzii, categorie, autori);
         this.ISBN = ISBN;
         this.editura = editura;
-    }
-
-    @Override
-    public void afiseazaInfo() {
-        System.out.println("Carte:");
-        System.out.println("Id: " + this.getId());
-        System.out.println("Titlu: " + this.getTitlu());
-        System.out.println("An publicare: " + this.getAnPublicare());
-        System.out.println("Nr pagini: " + this.getNrPagini());
-        System.out.println("Disponibil: " + this.isDisponibil());
-        System.out.println("Nr imprumuturi: " + this.getNrImprumuturi());
-
-        System.out.println("Autori: " + this.getAutori());
-        System.out.println("ISBN: " + this.getISBN());
-        System.out.println("Editura: " + this.getEditura());
-        System.out.println("Categorie: " + this.getCategorie());
     }
 
     @Override
@@ -64,16 +48,8 @@ public class Carte extends Publicatie implements Imprumutabil {
         return this.ISBN;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
-    }
-
     public Editura getEditura() {
         return this.editura;
-    }
-
-    public void setEditura(Editura editura) {
-        this.editura = editura;
     }
 
     @Override

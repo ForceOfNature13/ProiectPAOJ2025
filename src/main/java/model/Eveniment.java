@@ -10,13 +10,13 @@ public class Eveniment {
 
     private static int idGenerator = 0;
 
-    private int id;
-    private String titlu;
-    private String descriere;
-    private LocalDate data;
-    private String locatie;
-    private int capacitateMaxima;
-    private Set<Cititor> participanti = new TreeSet<>(
+    private final int id;
+    private final String titlu;
+    private final String descriere;
+    private final LocalDate data;
+    private final String locatie;
+    private final int capacitateMaxima;
+    private final Set<Cititor> participanti = new TreeSet<>(
             Comparator.comparing(Cititor::getNume)
                     .thenComparing(Cititor::getPrenume)
                     .thenComparingInt(Cititor::getId)
@@ -47,60 +47,8 @@ public class Eveniment {
         participanti.add(c);
     }
 
-    public void stergeParticipant(Cititor c) {
-        participanti.remove(c);
-    }
-
-    public Set<Cititor> getParticipanti() {
-        return Collections.unmodifiableSet(participanti);
-    }
-
     public int getId() {
         return id;
-    }
-
-    public String getTitlu() {
-        return titlu;
-    }
-
-    public void setTitlu(String titlu) {
-        this.titlu = titlu;
-    }
-
-    public String getDescriere() {
-        return descriere;
-    }
-
-    public void setDescriere(String descriere) {
-        this.descriere = descriere;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public String getLocatie() {
-        return locatie;
-    }
-
-    public void setLocatie(String locatie) {
-        this.locatie = locatie;
-    }
-
-    public int getCapacitateMaxima() {
-        return capacitateMaxima;
-    }
-
-    public void setCapacitateMaxima(int capacitateMaxima) {
-        this.capacitateMaxima = capacitateMaxima;
-    }
-
-    public void setParticipanti(Set<Cititor> participanti) {
-        this.participanti = participanti;
     }
 
     @Override
@@ -111,7 +59,7 @@ public class Eveniment {
                 + "Descriere: " + descriere + "\n"
                 + "Data: " + data + "\n"
                 + "Locatie: " + locatie + "\n"
-                + "CapacitateMaxima: " + capacitateMaxima + "\n"
+                + "Capacitate maxima: " + capacitateMaxima + "\n"
                 + "Participanti: " + participanti.size() + "\n";
     }
 

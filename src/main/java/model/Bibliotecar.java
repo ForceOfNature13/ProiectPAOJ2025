@@ -3,8 +3,8 @@ package model;
 import java.time.LocalDate;
 
 public class Bibliotecar extends Persoana {
-    private String sectie;
-    private LocalDate dataAngajare;
+    private final String sectie;
+    private final LocalDate dataAngajare;
     private RolBibliotecar rol;
 
     public Bibliotecar(String nume,
@@ -17,23 +17,6 @@ public class Bibliotecar extends Persoana {
                        LocalDate dataAngajare) {
         super(nume, prenume, email, telefon, username, parola);
         this.sectie = sectie;
-        this.dataAngajare = dataAngajare;
-        this.rol = rol;
-    }
-
-    public String getSectie() {
-        return this.sectie;
-    }
-
-    public void setSectie(String sectie) {
-        this.sectie = sectie;
-    }
-
-    public LocalDate getDataAngajare() {
-        return this.dataAngajare;
-    }
-
-    public void setDataAngajare(LocalDate dataAngajare) {
         this.dataAngajare = dataAngajare;
     }
 

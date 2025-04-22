@@ -1,6 +1,8 @@
 package main;
 
+import audit.*;
 import exceptie.*;
+import factory.*;
 import model.*;
 import service.AuthService;
 import service.BibliotecaService;
@@ -17,11 +19,9 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        AuditService.initObserver();
 
         BibliotecaService bibliotecaService = BibliotecaService.getInstance();
-        EvenimentService evenimentService = EvenimentService.getInstance();
-        AuthService authService = AuthService.getInstance();
-
         initData(bibliotecaService);
 
         boolean running = true;
@@ -45,35 +45,27 @@ public class Main {
         }
     }
 
-    private static void doLogin(BibliotecaService bibliotecaService) {
-        AuthService authService = AuthService.getInstance();
+    private static void doLogin(BibliotecaService svc) {
+
+        AuthService auth = AuthService.getInstance();
 
         System.out.print("Username: ");
         String user = scanner.nextLine();
         System.out.print("Parola: ");
         String pass = scanner.nextLine();
 
-        boolean succes = authService.login(
-                user,
-                pass,
-                bibliotecaService.getCititoriMap(),
-                bibliotecaService.getBibliotecariMap()
-        );
-
-        if (!succes) {
-            System.out.println("Login esuat! User inexistent sau parola incorecta!");
+        try {
+            auth.login(user, pass, svc.getCititoriMap(), svc.getBibliotecariMap());
+        } catch (AutentificareExceptie e) {
+            System.out.println(e.getMessage());
             return;
         }
 
-        Persoana persoana = authService.getUtilizatorCurent();
-        if (persoana instanceof Cititor) {
-            meniuCititor();
-        } else if (persoana instanceof Bibliotecar) {
-            meniuBibliotecar();
-        } else {
-            System.out.println("Tip de utilizator necunoscut!");
-        }
+        Persoana curent = auth.getUtilizatorCurent();
+        if (curent instanceof Cititor)      meniuCititor();
+        else if (curent instanceof Bibliotecar) meniuBibliotecar();
     }
+
 
     private static void doRegister(BibliotecaService bibliotecaService) {
         System.out.print("Nume: ");
@@ -91,17 +83,28 @@ public class Main {
         System.out.print("Adresa: ");
         String adresa = scanner.nextLine();
 
-        Cititor c = new Cititor(nume, prenume, email, telefon, username, parola, adresa, 3);
+        Cititor c;
+        try {
+            c = new CititorBuilder()
+                    .nume(nume)
+                    .prenume(prenume)
+                    .email(email)
+                    .telefon(telefon)
+                    .username(username)
+                    .parola(parola)
+                    .adresa(adresa)
+                    .nrMax(3)
+                    .build();
+        } catch (InputInvalidExceptie e) {
+            throw new RuntimeException(e);
+        }
         bibliotecaService.adaugaCititor(c);
 
         System.out.println("Cititor inregistrat cu succes!");
     }
 
-    /* ======================== MENIU CITITOR ======================== */
-
     private static void meniuCititor() {
         AuthService authService = AuthService.getInstance();
-        BibliotecaService bibliotecaService = BibliotecaService.getInstance();
         boolean running = true;
 
         while (running) {
@@ -124,10 +127,10 @@ public class Main {
             System.out.println("16. Adauga recenzie");
             System.out.println("17. Afiseaza recenzii");
             System.out.println("18. Listare evenimente");
-            System.out.println("18. Inscriere la eveniment");
-            System.out.println("19. Vizualizare imprumuturi active");
-            System.out.println("20. Vizualizare istoric imprumuturi");
-            System.out.println("21. Vizualizare amenzi");
+            System.out.println("19. Inscriere la eveniment");
+            System.out.println("20. Vizualizare imprumuturi active");
+            System.out.println("21. Vizualizare istoric imprumuturi");
+            System.out.println("22. Vizualizare amenzi");
             System.out.println("0. Logout");
 
             System.out.print("Alege optiunea: ");
@@ -165,11 +168,8 @@ public class Main {
         }
     }
 
-    /* ======================== MENIU BIBLIOTECAR ======================== */
-
     private static void meniuBibliotecar() {
         AuthService authService = AuthService.getInstance();
-        BibliotecaService bibliotecaService = BibliotecaService.getInstance();
         boolean running = true;
 
         while (running) {
@@ -202,6 +202,9 @@ public class Main {
             System.out.println("24. Sterge publicatie");
             System.out.println("25. Creeaza eveniment");
             System.out.println("26. Sterge eveniment");
+            System.out.println("27. Blocheaza utilizator");
+            System.out.println("28. Deblocheaza utilizator");
+            System.out.println("29. Adauga bibliotecar STAFF");
             System.out.println("0. Logout");
 
             System.out.print("Alege optiunea: ");
@@ -234,6 +237,9 @@ public class Main {
                 case "24" -> stergePublicatieBibliotecar();
                 case "25" -> creeazaEvenimentBibliotecar();
                 case "26" -> stergeEvenimentBibliotecar();
+                case "27" -> blocheazaUtilizator();
+                case "28" -> deblocheazaUtilizator();
+                case "29" -> adaugaBibliotecarStaff();
                 case "0" -> {
                     authService.logout();
                     running = false;
@@ -242,8 +248,6 @@ public class Main {
             }
         }
     }
-
-    /* ======================== ACTIUNI COMUNE ======================== */
 
     private static void listareToatePublicatii() {
         BibliotecaService svc = BibliotecaService.getInstance();
@@ -325,8 +329,6 @@ public class Main {
         BibliotecaService.getInstance().sorteazaDupaTitlu().forEach(System.out::println);
     }
 
-    /* ======================== OPERATIUNI IMPRUMUT ======================== */
-
     private static void imprumutaPublicatie() {
         AuthService auth = AuthService.getInstance();
         BibliotecaService svc = BibliotecaService.getInstance();
@@ -341,19 +343,17 @@ public class Main {
         try {
             svc.imprumutaPublicatie(idPub, cititor.getId());
             System.out.println("Imprumut realizat!");
-            /* ===== BLOCAJ TEST PENALIZARE ===== */
+            /* ===== BLOCAJ TEST PENALIZARE =====
             // forteaza scadenta cu 3 zile in urma pentru a verifica penalizarea
-            /*
+
             Imprumut impr = cititor.gasesteImprumutActiv(idPub);
             if (impr != null) {
                 impr.setDataScadenta(java.time.LocalDate.now().minusDays(3));
                 System.out.println("(DEBUG) Scadenta mutata in trecut cu 3 zile.");
-            }
-            */
+            }*/
+
             /* ================================== */
-        } catch (ResursaIndisponibilaExceptie |
-                 LimitaDepasitaExceptie |
-                 EntitateInexistentaExceptie e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -393,8 +393,7 @@ public class Main {
         try {
             svc.rezervaPublicatie(idPub, cititor.getId());
             System.out.println("Rezervare adaugata!");
-        } catch (LimitaDepasitaExceptie |
-                 EntitateInexistentaExceptie e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -413,14 +412,10 @@ public class Main {
         try {
             svc.reinnoiesteImprumut(idPub, cititor.getId());
             System.out.println("Reinnoire cu succes!");
-        } catch (ResursaIndisponibilaExceptie |
-                 LimitaDepasitaExceptie |
-                 EntitateInexistentaExceptie e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
-    /* ======================== RECENZII ======================== */
 
     private static void adaugaRecenzie() {
         AuthService auth = AuthService.getInstance();
@@ -472,7 +467,6 @@ public class Main {
         }
     }
 
-    /* ======================== EVENIMENTE ======================== */
 
     private static void inscriereEveniment() {
         AuthService auth = AuthService.getInstance();
@@ -492,8 +486,6 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
-
-    /* ======================== VIZUALIZARI ======================== */
 
     private static void vizualizareImprumuturiActive() {
         AuthService auth = AuthService.getInstance();
@@ -522,8 +514,6 @@ public class Main {
         }
     }
 
-    /* ======================== ADMIN OPERATIONS ======================== */
-
     private static void adaugaPublicatieBibliotecar() {
         BibliotecaService svc = BibliotecaService.getInstance();
 
@@ -541,66 +531,66 @@ public class Main {
 
             System.out.print("An publicare: ");
             int an = Integer.parseInt(scanner.nextLine().trim());
-            if (an < 1500 || an > java.time.Year.now().getValue())
+            if (an > java.time.Year.now().getValue())
                 throw new InputInvalidExceptie("an publicare", an);
 
             System.out.print("Nr pagini: ");
             int nrPag = Integer.parseInt(scanner.nextLine().trim());
             if (nrPag < 0) throw new InputInvalidExceptie("nr pagini", nrPag);
 
-            boolean disponibil = true;
-            List<Recenzie> recenzii = new ArrayList<>();
             List<String> autori = new ArrayList<>();
-
             System.out.print("Autori (virgula): ");
             String aIn = scanner.nextLine();
             if (!aIn.isBlank())
                 Arrays.stream(aIn.split(",")).map(String::trim).forEach(autori::add);
 
-            Publicatie p;
-
-            switch (tip) {
+            Map<String,Object> extra = new HashMap<>();
+            PublicatieFactory factory = switch (tip) {
                 case "1" -> {
                     System.out.print("ISBN: ");
-                    String isbn = scanner.nextLine().trim();
-                    if (isbn.isBlank()) throw new InputInvalidExceptie("ISBN", isbn);
+                    extra.put("isbn", scanner.nextLine().trim());
 
-                    Editura ed = new Editura(1, "DefaultEditura", "Romania");
+                    extra.put("editura", new Editura(1,"DefaultEditura","Romania"));
                     System.out.print("Categorie: ");
-                    String cat = scanner.nextLine().trim();
-                    p = new Carte(titlu, an, nrPag, disponibil, recenzii, autori, isbn, ed, cat);
+                    extra.put("categorie", scanner.nextLine().trim());
+
+                    yield new CarteFactory();
                 }
                 case "2" -> {
                     System.out.print("Frecventa: ");
-                    String freq = scanner.nextLine().trim();
+                    extra.put("frecventa", scanner.nextLine().trim());
+
                     System.out.print("Numar: ");
-                    int nr = Integer.parseInt(scanner.nextLine().trim());
-                    if (nr <= 0) throw new InputInvalidExceptie("numar revista", nr);
+                    extra.put("numar", Integer.parseInt(scanner.nextLine().trim()));
 
                     System.out.print("Categorie: ");
-                    String cat = scanner.nextLine().trim();
-                    p = new Revista(titlu, an, nrPag, disponibil, recenzii, freq, nr, cat, autori);
+                    extra.put("categorie", scanner.nextLine().trim());
+
+                    yield new RevistaFactory();
                 }
                 case "3" -> {
                     System.out.print("Durata (min): ");
-                    int durata = Integer.parseInt(scanner.nextLine().trim());
-                    if (durata <= 0) throw new InputInvalidExceptie("durata audiobook", durata);
+                    extra.put("durata", Integer.parseInt(scanner.nextLine().trim()));
 
                     System.out.print("Format: ");
-                    String format = scanner.nextLine().trim();
-                    System.out.print("Categorie: ");
-                    String cat = scanner.nextLine().trim();
+                    extra.put("format", scanner.nextLine().trim());
 
                     System.out.print("Naratori (virgula): ");
                     List<String> nar = new ArrayList<>();
                     String nIn = scanner.nextLine();
                     if (!nIn.isBlank())
                         Arrays.stream(nIn.split(",")).map(String::trim).forEach(nar::add);
+                    extra.put("naratori", nar);
 
-                    p = new Audiobook(titlu, an, nrPag, disponibil, recenzii, cat, autori, durata, nar, format);
+                    System.out.print("Categorie: ");
+                    extra.put("categorie", scanner.nextLine().trim());
+
+                    yield new AudiobookFactory();
                 }
                 default -> throw new InputInvalidExceptie("tip publicatie", tip);
-            }
+            };
+            PublicatieDTO dto = new PublicatieDTO(titlu, an, nrPag, autori, extra);
+            Publicatie p = factory.create(dto);
 
             svc.adaugaPublicatie(p);
             System.out.println("Publicatie adaugata cu ID " + p.getId());
@@ -664,7 +654,14 @@ public class Main {
             int capacitate = Integer.parseInt(scanner.nextLine().trim());
             if (capacitate <= 0) throw new InputInvalidExceptie("capacitate", capacitate);
 
-            Eveniment e = new Eveniment(titlu, descriere, data, locatie, capacitate);
+            Eveniment e = new EvenimentBuilder()
+                    .titlu(titlu)
+                    .descriere(descriere)
+                    .data(data)
+                    .locatie(locatie)
+                    .capacitate(capacitate)
+                    .build();
+
             EvenimentService.getInstance().creazaEveniment(e);
             System.out.println("Eveniment creat cu ID " + e.getId());
 
@@ -700,7 +697,48 @@ public class Main {
                 .forEach(System.out::println);
     }
 
-    /* ======================== INITIAL DATA ======================== */
+    private static void blocheazaUtilizator() {
+        System.out.print("ID persoana: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        try {
+            BibliotecaService.getInstance().blocheazaUtilizator(id);
+            System.out.println("Utilizator blocat.");
+        } catch (Exception e) { System.out.println(e.getMessage()); }
+    }
+
+    private static void deblocheazaUtilizator() {
+        System.out.print("ID persoana: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        try {
+            BibliotecaService.getInstance().deblocheazaUtilizator(id);
+            System.out.println("Utilizator deblocat.");
+        } catch (Exception e) { System.out.println(e.getMessage()); }
+    }
+
+    private static void adaugaBibliotecarStaff() {
+        try {
+            System.out.print("Nume: ");    String nume = scanner.nextLine();
+            System.out.print("Prenume: "); String pren = scanner.nextLine();
+            System.out.print("Email: ");   String email = scanner.nextLine();
+            System.out.print("Telefon: "); String tel = scanner.nextLine();
+            System.out.print("Username: ");String user = scanner.nextLine();
+            System.out.print("Parola: ");  String pass = scanner.nextLine();
+
+            Bibliotecar b = new BibliotecarBuilder()
+                    .nume(nume)
+                    .prenume(pren)
+                    .email(email)
+                    .telefon(tel)
+                    .username(user)
+                    .parola(pass)
+                    .sectie("Sectie necunoscuta")
+                    .data(java.time.LocalDate.now())
+                    .build();
+
+            BibliotecaService.getInstance().adaugaBibliotecarStaff(b);
+            System.out.println("Bibliotecar STAFF adaugat, ID " + b.getId());
+        } catch (Exception e) { System.out.println(e.getMessage()); }
+    }
 
     private static void initData(BibliotecaService svc) {
         Bibliotecar admin = new Bibliotecar(

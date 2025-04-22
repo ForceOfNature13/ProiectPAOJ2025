@@ -9,12 +9,12 @@ import java.util.Objects;
 public class Recenzie {
     private static int idGenerator = 0;
 
-    private int id;
-    private int idPublicatie;
-    private int idCititor;
+    private final int id;
+    private final int idPublicatie;
+    private final int idCititor;
     private int rating;
-    private String comentariu;
-    private LocalDateTime data;
+    private final String comentariu;
+    private final LocalDateTime data;
 
     public Recenzie(int idPublicatie, int idCititor, int rating, String comentariu, LocalDateTime data)
             throws InputInvalidExceptie {
@@ -30,22 +30,6 @@ public class Recenzie {
         return id;
     }
 
-    public int getIdPublicatie() {
-        return idPublicatie;
-    }
-
-    public void setIdPublicatie(int idPublicatie) {
-        this.idPublicatie = idPublicatie;
-    }
-
-    public int getIdCititor() {
-        return idCititor;
-    }
-
-    public void setIdCititor(int idCititor) {
-        this.idCititor = idCititor;
-    }
-
     public int getRating() {
         return rating;
     }
@@ -55,22 +39,6 @@ public class Recenzie {
             throw new InputInvalidExceptie("rating", rating);
         }
         this.rating = rating;
-    }
-
-    public String getComentariu() {
-        return comentariu;
-    }
-
-    public void setComentariu(String comentariu) {
-        this.comentariu = comentariu;
-    }
-
-    public LocalDateTime getData() {
-        return data;
-    }
-
-    public void setData(LocalDateTime data) {
-        this.data = data;
     }
 
     @Override

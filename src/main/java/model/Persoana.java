@@ -12,6 +12,7 @@ public abstract class Persoana {
     protected String telefon;
     protected String username;
     protected String parola;
+    private boolean blocat = false;
 
     public Persoana(String nume, String prenume, String email, String telefon, String username, String parola) {
         this.id = ++idGenerator;
@@ -31,48 +32,23 @@ public abstract class Persoana {
         return this.nume;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
     public String getPrenume() {
         return this.prenume;
-    }
-
-    public void setPrenume(String prenume) {
-        this.prenume = prenume;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefon() {
-        return this.telefon;
-    }
-
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
     }
 
     public String getUsername() {
         return this.username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getParola() {
         return this.parola;
     }
 
-    public void setParola(String parola) {
-        this.parola = parola;
+    public boolean getBlocat() {
+        return blocat;
+    }
+    public void setBlocat(boolean blocat) {
+        this.blocat = blocat;
     }
 
     @Override
@@ -89,8 +65,7 @@ public abstract class Persoana {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Persoana)) return false;
-        Persoana persoana = (Persoana) o;
+        if (!(o instanceof Persoana persoana)) return false;
         return this.id == persoana.id;
     }
 

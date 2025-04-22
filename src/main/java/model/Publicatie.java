@@ -14,7 +14,7 @@ public abstract class Publicatie implements Imprumutabil{
     protected int nrImprumuturi;
     protected List<Recenzie> listaRecenzii;
     protected String categorie;
-
+    protected double rating;
 
     protected List<String> autori;
 
@@ -30,9 +30,8 @@ public abstract class Publicatie implements Imprumutabil{
         this.listaRecenzii = listaRecenzii;
         this.categorie = categorie;
         this.autori = autori;
+        this.rating= calculeazaRatingIntern();
     }
-
-    public abstract void afiseazaInfo();
 
     public int getId() {
         return this.id;
@@ -42,24 +41,8 @@ public abstract class Publicatie implements Imprumutabil{
         return this.titlu;
     }
 
-    public void setTitlu(String titlu) {
-        this.titlu = titlu;
-    }
-
     public int getAnPublicare() {
         return this.anPublicare;
-    }
-
-    public void setAnPublicare(int anPublicare) {
-        this.anPublicare = anPublicare;
-    }
-
-    public int getNrPagini() {
-        return this.nrPagini;
-    }
-
-    public void setNrPagini(int nrPagini) {
-        this.nrPagini = nrPagini;
     }
 
     public boolean isDisponibil() {
@@ -82,35 +65,26 @@ public abstract class Publicatie implements Imprumutabil{
         return this.listaRecenzii;
     }
 
-    public void setListaRecenzii(List<Recenzie> listaRecenzii) {
-        this.listaRecenzii = listaRecenzii;
-    }
-
     public String getCategorie() {
         return this.categorie;
-    }
-
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
     }
 
     public List<String> getAutori() {
         return this.autori;
     }
 
-    public double getRating() {
-        if (listaRecenzii == null || listaRecenzii.isEmpty()) {
-            return 0.0;
-        }
+    private double calculeazaRatingIntern() {
+        if (listaRecenzii == null || listaRecenzii.isEmpty()) return 0;
         return listaRecenzii.stream()
                 .mapToInt(Recenzie::getRating)
                 .average()
-                .orElse(0.0);
+                .orElse(0);
     }
 
-    public void setAutori(List<String> autori) {
-        this.autori = autori;
-    }
+    public double getRating() { return rating; }
+
+    public void updateRating() { this.rating = calculeazaRatingIntern(); }
+
 
     @Override
     public String toString() {
@@ -122,7 +96,8 @@ public abstract class Publicatie implements Imprumutabil{
                 "Disponibil: " + this.disponibil + "\n" +
                 "Nr imprumuturi: " + this.nrImprumuturi + "\n" +
                 "Categorie: " + this.categorie + "\n" +
-                "Autori: " + this.autori + "\n";
+                "Autori: " + this.autori + "\n"+
+                "Rating: " + this.rating + "\n";
     }
 
     @Override

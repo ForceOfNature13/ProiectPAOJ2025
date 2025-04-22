@@ -1,9 +1,8 @@
 package util;
 
 import model.Publicatie;
-import java.util.Comparator;
 
-public class ComparatorPublicatieDupaTitlu implements Comparator<Publicatie> {
+public class ComparatorPublicatieDupaTitlu implements PublicatieSortStrategy {
 
     @Override
     public int compare(Publicatie p1, Publicatie p2) {

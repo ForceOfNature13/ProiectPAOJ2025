@@ -16,6 +16,12 @@ public class RezervarePublicatie {
         this.coadaAsteptare = new LinkedList<>();
     }
 
+    public RezervarePublicatie(int idPub) {
+        this.idPublicatie = idPub;
+        this.limitaMaxCoada = 5;
+        this.coadaAsteptare = new LinkedList<>();
+    }
+
     public void adaugaInCoada(Cititor cititor) throws LimitaDepasitaExceptie {
         int curent = coadaAsteptare.size();
         if (curent >= limitaMaxCoada) {
@@ -28,10 +34,6 @@ public class RezervarePublicatie {
         coadaAsteptare.offer(cititor);
     }
 
-    public Cititor extrageUrmatorul() {
-        return coadaAsteptare.poll();
-    }
-
     public Cititor vizualizeazaUrmatorul() {
         return coadaAsteptare.peek();
     }
@@ -39,20 +41,17 @@ public class RezervarePublicatie {
     public boolean esteGoala() {
         return coadaAsteptare.isEmpty();
     }
-
-    public Queue<Cititor> getCoadaAsteptare() {
-        return Collections.unmodifiableCollection(coadaAsteptare) instanceof Queue
-                ? (Queue<Cititor>) Collections.unmodifiableCollection(coadaAsteptare)
-                : null;
-    }
-
-    public int getIdPublicatie() {
-        return idPublicatie;
+    public List<Cititor> getCoadaAsteptare() {
+        return List.copyOf(coadaAsteptare);
     }
 
     public int getLimitaMaxCoada() {
         return limitaMaxCoada;
     }
+    public Cititor extrageUrmatorul() {
+        return coadaAsteptare.poll();
+    }
+
 
     @Override
     public String toString() {

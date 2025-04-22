@@ -8,6 +8,9 @@ import model.Cititor;
 import model.Eveniment;
 import model.RolBibliotecar;
 
+import observer.EventBus;
+import audit.AuditAction;
+
 import java.util.*;
 
 public class EvenimentService {
@@ -29,6 +32,7 @@ public class EvenimentService {
         var userCurent = AuthService.getInstance().getUtilizatorCurent();
         if (userCurent instanceof Bibliotecar b && b.getRol() == RolBibliotecar.ADMIN) {
             evenimente.put(e.getId(), e);
+            EventBus.publish(AuditAction.EVENIMENT_CREAT);
         } else {
             throw new AccesInterzisExceptie();
         }
@@ -45,15 +49,12 @@ public class EvenimentService {
         if (evenimente.remove(idEveniment) == null) {
             throw new EntitateInexistentaExceptie("Eveniment", idEveniment);
         }
+        EventBus.publish(AuditAction.EVENIMENT_STERS);
     }
-
 
     public List<Eveniment> listareEvenimente() {
+        EventBus.publish(AuditAction.LISTARE_EVENIMENTE);
         return new ArrayList<>(evenimente.values());
-    }
-
-    public Eveniment getEvenimentById(int idEveniment) {
-        return evenimente.get(idEveniment);
     }
 
     public void inscrieParticipant(int idEveniment, Cititor c)
@@ -63,14 +64,6 @@ public class EvenimentService {
             throw new EntitateInexistentaExceptie("Eveniment", idEveniment);
         }
         e.inscrieParticipant(c);
-    }
-
-    public void dezinscrieParticipant(int idEveniment, Cititor c)
-            throws EntitateInexistentaExceptie {
-        Eveniment e = evenimente.get(idEveniment);
-        if (e == null) {
-            throw new EntitateInexistentaExceptie("Eveniment", idEveniment);
-        }
-        e.stergeParticipant(c);
+        EventBus.publish(AuditAction.INSCRIERE_EVENIMENT);
     }
 }
