@@ -1,18 +1,3 @@
-<style>
-  /* Stiluri pentru GitHub README */
-  .smartlib-container { background:#0d1117; color:#c9d1d9; padding:2rem; border-radius:1rem; font-family:'Segoe UI',sans-serif; }
-  .smartlib-hero-title { color:#58a6ff; font-size:2.5rem; margin-bottom:0.5rem; }
-  .smartlib-subtitle { color:#c9d1d9; font-size:1.1rem; margin-bottom:2rem; }
-  details { background:#161b22; padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
-  summary { cursor:pointer; font-size:1.25rem; font-weight:bold; color:#58a6ff; }
-  summary::marker { font-size:1.25rem; }
-  ul, ol, table { margin-top:0.5rem; }
-  ul li, ol li { margin-bottom:0.5rem; }
-  table { width:100%; border-collapse:collapse; }
-  th, td { border:1px solid #30363d; padding:0.75rem; text-align:left; }
-  th { background:#30363d; }
-</style>
-
 <div class="smartlib-container">
   <h1 class="smartlib-hero-title">🏛️ SmartLibrary</h1>
   <p class="smartlib-subtitle">Soluție modernă pentru gestionarea inteligentă a bibliotecilor – Java 21, arhitectură scalabilă.</p>
@@ -23,13 +8,13 @@
     <ul>
       <li>📚 <strong>29 CLI</strong> – comenzi complete pentru operațiuni zilnice</li>
       <li>☕ <strong>Java 21</strong> – Records, switch-expressions, Stream API</li>
-      <li>🛡️ <strong>Audit Async</strong> – EventBus → AuditService (thread dedicat)</li>
-      <li>🏫 <strong>User-centric</strong> – interfață intuitivă, roluri STAFF/ADMIN</li>
+      <li>🛡️ <strong>Audit Async</strong> – EventBus → AuditService (thread dedicat, LinkedBlockingQueue)</li>
+      <li>🏫 <strong>User-centric</strong> – UI intuitivă, cozi FIFO de rezervare, penalizări automate, roluri STAFF/ADMIN</li>
     </ul>
   </details>
 
   <details>
-    <summary>📋 Comenzi CLI</summary>
+    <summary>📋 Comenzi & Interogări</summary>
     <ol>
       <li>📚 Listare publicații</li>
       <li>🔍 Căutare după titlu</li>
@@ -40,10 +25,10 @@
       <li>🧮 Căutare complexă + sortare multiplă</li>
       <li>🗓️ Sortare după anul publicării</li>
       <li>⭐ Sortare după rating</li>
-      <li>🔢 Sortare după nr. de împrumuturi</li>
+      <li>🔢 Sortare după nr. de împrumuturi</li>
       <li>🔠 Sortare alfabetică</li>
       <li>📥 Împrumută publicație</li>
-      <li>📤 Returnează publicație + penalizare</li>
+      <li>📤 Returnează publicație + penalizare</li>
       <li>📌 Rezervă publicație (FIFO)</li>
       <li>🔄 Reînnoiește împrumut</li>
       <li>📝 Adaugă recenzie</li>
@@ -64,7 +49,7 @@
   </details>
 
   <details>
-    <summary>🧩 Model de domeniu</summary>
+    <summary>🧩 Model</summary>
     <table>
       <thead>
         <tr><th>Entitate</th><th>Descriere</th></tr>
@@ -88,15 +73,19 @@
   </details>
 
   <details>
-    <summary>🔨 Pattern-uri</summary>
+    <summary>🔧 Arhitectură & Concepte</summary>
     <ul>
-      <li>⚙️ Singleton – BibliotecaService, AuthService, EvenimentService, AuditService, EventBus</li>
-      <li>🏭 Factory – CarteFactory, RevistaFactory, AudiobookFactory</li>
-      <li>🔧 Builder – CititorBuilder, BibliotecarBuilder, EvenimentBuilder</li>
-      <li>🎯 Strategy – SortContext + comparatoare runtime</li>
-      <li>🔗 Chain of Responsibility – LimitaImprumuturiHandler → CoadaRezervariPlinaHandler</li>
-      <li>👁️ Observer – EventBus → AuditService</li>
-      <li>📦 DTO – PublicatieDTO</li>
+      <li>🔸 <strong>POO</strong> – Moștenire, Polimorfism, Încapsulare prin clase abstracte și interfețe (Imprumutabil)</li>
+      <li>🔸 <strong>Java 21</strong> – record pentru Editura, enum pentru RolBibliotecar, Stream API (filter, map, sorted)</li>
+      <li>🔸 <strong>Colecții</strong> – ArrayList, HashMap, TreeSet, LinkedList pentru stocare și cozi FIFO</li>
+      <li>🔸 <strong>Excepții personalizate</strong> – AccesInterzisExceptie, ResursaIndisponibilaExceptie, LimitaDepasitaExceptie</li>
+      <li>🔹 <strong>Singleton</strong> – serviciile principale (AuthService, BibliotecaService, AuditService)</li>
+      <li>🔹 <strong>Factory</strong> – instanțierea publicațiilor (CarteFactory, RevistaFactory, AudiobookFactory)</li>
+      <li>🔹 <strong>Builder</strong> – pentru obiecte complexe (CititorBuilder, EvenimentBuilder)</li>
+      <li>🔹 <strong>Strategy</strong> – sortări dinamice prin SortContext și comparatoare</li>
+      <li>🔹 <strong>Chain of Responsibility</strong> – validare lanț (LimitaImprumuturiHandler → CoadaRezervariPlinaHandler)</li>
+      <li>🔹 <strong>Observer</strong> – audit asincron (EventBus → AuditService)</li>
+      <li>🔹 <strong>DTO</strong> – PublicatieDTO pentru transfer de date între straturi</li>
     </ul>
   </details>
 </div>
