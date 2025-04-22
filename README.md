@@ -1,10 +1,8 @@
 <style>
   /* Stiluri pentru GitHub README */
   .smartlib-container { background:#0d1117; color:#c9d1d9; padding:2rem; border-radius:1rem; font-family:'Segoe UI',sans-serif; }
-  .smartlib-hero { text-align:center; margin-bottom:2rem; }
-  .smartlib-hero-icon { font-size:3rem; vertical-align:middle; margin-right:0.5rem; }
-  .smartlib-hero-title { display:inline-block; font-family:'Segoe UI',sans-serif; color:#58a6ff; font-size:2.5rem; vertical-align:middle; margin:0; }
-  .smartlib-subtitle { color:#c9d1d9; font-size:1.1rem; margin-top:0.2rem; margin-bottom:2rem; }
+  .smartlib-hero-title { color:#58a6ff; font-size:2.5rem; margin-bottom:0.5rem; }
+  .smartlib-subtitle { color:#c9d1d9; font-size:1.1rem; margin-bottom:2rem; }
   details { background:#161b22; padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
   summary { cursor:pointer; font-size:1.25rem; font-weight:bold; color:#58a6ff; }
   summary::marker { font-size:1.25rem; }
@@ -16,10 +14,7 @@
 </style>
 
 <div class="smartlib-container">
-  <div class="smartlib-hero">
-    <span class="smartlib-hero-icon">🏛️</span>
-    <h1 class="smartlib-hero-title">SmartLibrary</h1>
-  </div>
+  <h1 class="smartlib-hero-title">🏛️ SmartLibrary</h1>
   <p class="smartlib-subtitle">Soluție modernă pentru gestionarea inteligentă a bibliotecilor – Java 21, arhitectură scalabilă.</p>
 
   <details open>
