@@ -20,6 +20,7 @@ public class Bibliotecar extends Persoana {
         this.dataAngajare = dataAngajare;
     }
 
+
     public RolBibliotecar getRol() {
         return this.rol;
     }
@@ -35,5 +36,13 @@ public class Bibliotecar extends Persoana {
                 "Sectie: " + this.sectie + "\n" +
                 "Data angajare: " + this.dataAngajare + "\n" +
                 "Rol: " + this.rol + "\n";
+    }
+
+    public String getSectie() {
+        return this.sectie;
+    }
+
+    public String getDataAngajare() {
+        return this.dataAngajare.toString();
     }
 }

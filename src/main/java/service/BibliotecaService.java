@@ -3,6 +3,7 @@ package service;
 import exceptie.*;
 import model.*;
 import util.*;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -234,18 +235,21 @@ public class BibliotecaService {
     }
 
     public void adaugaRezervare(int idPub) {
-        rezervari.putIfAbsent(idPub, new RezervarePublicatie(idPub, 5));
+        rezervari.putIfAbsent(idPub, new RezervarePublicatie(idPub));
         EventBus.publish(AuditAction.REZERVARE_ADAUGATA);
     }
 
     public void rezervaPublicatie(int idPub, int idCit) throws Exception {
         Publicatie p = getPublicatieById(idPub);
-        Cititor c = cititori.get(idCit);
+        Cititor   c = cititori.get(idCit);
         if (c == null) throw new EntitateInexistentaExceptie("Cititor", idCit);
 
         rezervareChain.validate(p, c);
 
-        RezervarePublicatie rez = rezervari.computeIfAbsent(idPub, k -> new RezervarePublicatie(idPub));
+        RezervarePublicatie rez = rezervari.computeIfAbsent(
+                idPub,
+                k -> new RezervarePublicatie(idPub)
+        );
         rez.adaugaInCoada(c);
 
         EventBus.publish(AuditAction.PUBLICATIE_REZERVATA);

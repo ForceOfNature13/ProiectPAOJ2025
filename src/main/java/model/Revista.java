@@ -23,6 +23,19 @@ public class Revista extends Publicatie implements Imprumutabil {
         this.frecventaAparitie = frecventaAparitie;
         this.numar = numar;
     }
+    public Revista(String titlu, int anPublicare, int nrPagini, boolean disponibil,
+                   String frecventaAparitie, int numar,
+                   String categorie, List<String> autori) {
+        this(titlu,
+                anPublicare,
+                nrPagini,
+                disponibil,
+                java.util.Collections.<Recenzie>emptyList(),
+                frecventaAparitie,
+                numar,
+                categorie,
+                autori);
+    }
 
     @Override
     public void imprumuta() throws ResursaIndisponibilaExceptie {

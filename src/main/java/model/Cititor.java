@@ -85,4 +85,8 @@ public class Cititor extends Persoana {
                 + "Numar maxim imprumuturi: " + this.nrMaxImprumuturi + "\n"
                 + "Penalizari: " + this.sumaPenalizari + "\n";
     }
+
+    public String getAdresa() {
+        return this.adresa;
+    }
 }

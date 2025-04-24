@@ -112,4 +112,12 @@ public abstract class Publicatie implements Imprumutabil{
     public int hashCode() {
         return Objects.hash(this.id);
     }
+
+    public int getNrPagini() {
+        return this.nrPagini;
+    }
+
+    public void setRating(double rating){
+        this.rating=rating;
+    }
 }

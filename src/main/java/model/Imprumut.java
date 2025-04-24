@@ -42,7 +42,6 @@ public class Imprumut {
         this.dataScadenta = dataImprumut.plusDays(14);
     }
 
-
     public int getId() {
         return this.id;
     }
@@ -103,5 +102,32 @@ public class Imprumut {
     @Override
     public int hashCode() {
         return Objects.hash(this.id);
+    }
+
+    public int getPublicatieId() {
+        return this.idPublicatie;
+    }
+
+    public int getCititorId() {
+        return this.idCititor;
+    }
+
+    public LocalDate getDataImprumut() {
+        return this.dataImprumut;
+    }
+
+    public double getPenalitate() {
+        if (this.dataReturnare == null) {
+            return 0.0;
+        }
+        if (this.dataReturnare.isAfter(this.dataScadenta)) {
+            long zileIntarziere = this.dataReturnare.toEpochDay() - this.dataScadenta.toEpochDay();
+            return zileIntarziere * 1.5;
+        }
+        return 0.0;
+    }
+
+    public int getIdCititor() {
+        return this.idCititor;
     }
 }

@@ -58,4 +58,12 @@ public class Audiobook extends Publicatie implements Imprumutabil {
                 "Naratori: " + this.naratori + "\n" +
                 "Format: " + this.format + "\n";
     }
+
+    public int getDurata() {
+        return this.durata;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
 }

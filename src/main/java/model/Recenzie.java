@@ -66,4 +66,12 @@ public class Recenzie {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public int getIdPublicatie() {
+        return this.idPublicatie;
+    }
+
+    public int getIdCititor() {
+        return this.idCititor;
+    }
 }

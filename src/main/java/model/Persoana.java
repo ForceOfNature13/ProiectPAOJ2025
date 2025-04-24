@@ -73,4 +73,16 @@ public abstract class Persoana {
     public int hashCode() {
         return Objects.hash(this.id);
     }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public  String getTelefon(){
+        return this.telefon;
+    }
+
+    public void setTelefon(String number) {
+        this.telefon = number;
+    }
 }
