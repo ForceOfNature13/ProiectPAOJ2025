@@ -26,6 +26,6 @@ public class EdituraServiceCrud {
     public int create(Editura e)              { return repo.save(e); }
     public Optional<Editura> read(int id)     { return repo.findById(id); }
     public List<Editura> readAll()            { return repo.findAll(); }
-    public void update(Editura e)             { repo.update(e, e.id()); }
+    public void update(Editura e)             { repo.update(e, e.getId()); }
     public void delete(int id)                { repo.deleteById(id); }
 }

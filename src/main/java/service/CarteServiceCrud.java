@@ -61,4 +61,6 @@ public class CarteServiceCrud {
             throw new RuntimeException("Eroare la delete carte: " + ex.getMessage(), ex);
         }
     }
+
+
 }

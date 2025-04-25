@@ -53,4 +53,5 @@ public class RevistaServiceCrud {
             throw new RuntimeException("Eroare delete revista: " + ex.getMessage(), ex);
         }
     }
+
 }

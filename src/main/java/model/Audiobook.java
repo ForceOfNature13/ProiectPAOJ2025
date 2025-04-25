@@ -5,7 +5,7 @@ import exceptie.ResursaIndisponibilaExceptie;
 
 import java.util.List;
 
-public class Audiobook extends Publicatie implements Imprumutabil {
+public class Audiobook extends Publicatie {
 
     private final int durata;
     private final List<String> naratori;

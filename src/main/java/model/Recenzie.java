@@ -6,10 +6,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Recenzie {
-    private static int idGenerator = 0;
-
-    private final int id;
+public class Recenzie  implements Identifiable {
+    private int id;
     private final int idPublicatie;
     private final int idCititor;
     private int rating;
@@ -18,16 +16,12 @@ public class Recenzie {
 
     public Recenzie(int idPublicatie, int idCititor, int rating, String comentariu, LocalDateTime data)
             throws InputInvalidExceptie {
-        this.id = ++idGenerator;
+        this.id =0;
         this.idPublicatie = idPublicatie;
         this.idCititor = idCititor;
         setRating(rating);
         this.comentariu = comentariu;
         this.data = data;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getRating() {
@@ -73,5 +67,23 @@ public class Recenzie {
 
     public int getIdCititor() {
         return this.idCititor;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getComentariu() {
+        return this.comentariu;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

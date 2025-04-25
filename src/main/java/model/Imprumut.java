@@ -3,20 +3,16 @@ package model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Imprumut {
-    private static int idGenerator = 0;
+public class Imprumut implements Identifiable {
 
     private int id;
     private final int idPublicatie;
     private final int idCititor;
     private final LocalDate dataImprumut;
-    private LocalDate dataScadenta;
-    private LocalDate dataReturnare;
+    private       LocalDate dataScadenta;
+    private       LocalDate dataReturnare;
 
-
-    private int numarReinnoiri;
-
-
+    private int    numarReinnoiri;
     private double penalitate;
 
     public Imprumut(int idPublicatie,
@@ -24,110 +20,65 @@ public class Imprumut {
                     LocalDate dataImprumut,
                     LocalDate dataScadenta,
                     LocalDate dataReturnare) {
-        this.id = ++idGenerator;
-        this.idPublicatie = idPublicatie;
-        this.idCititor = idCititor;
-        this.dataImprumut = dataImprumut;
-        this.dataScadenta = dataScadenta;
-        this.dataReturnare = dataReturnare;
 
+        this.id             = 0;
+        this.idPublicatie   = idPublicatie;
+        this.idCititor      = idCititor;
+        this.dataImprumut   = dataImprumut;
+        this.dataScadenta   = dataScadenta;
+        this.dataReturnare  = dataReturnare;
 
         this.numarReinnoiri = 0;
-        this.penalitate = 0.0;
+        this.penalitate     = 0.0;
     }
+
     public Imprumut(int idPub, int idCit) {
-        this.idPublicatie = idPub;
-        this.idCititor    = idCit;
-        this.dataImprumut = LocalDate.now();
-        this.dataScadenta = dataImprumut.plusDays(14);
+        this(idPub,
+                idCit,
+                LocalDate.now(),
+                LocalDate.now().plusDays(14),
+                null);
     }
 
-    public int getId() {
-        return this.id;
-    }
+    @Override
+    public Integer getId()        { return id; }
+    @Override
+    public void   setId(Integer id) { this.id = id; }
 
-    public int getIdPublicatie() {
-        return this.idPublicatie;
-    }
-
-    public LocalDate getDataScadenta() {
-        return this.dataScadenta;
-    }
-
-    public void setDataScadenta(LocalDate dataScadenta) {
-        this.dataScadenta = dataScadenta;
-    }
-
-    public LocalDate getDataReturnare() {
-        return this.dataReturnare;
-    }
-
-    public void setDataReturnare(LocalDate dataReturnare) {
-        this.dataReturnare = dataReturnare;
-    }
-
-    public int getNumarReinnoiri() {
-        return this.numarReinnoiri;
-    }
-
-    public void setNumarReinnoiri(int numarReinnoiri) {
-        this.numarReinnoiri = numarReinnoiri;
-    }
-
-    public void setPenalitate(double penalitate) {
-        this.penalitate = penalitate;
-    }
+    public int       getIdPublicatie()  { return idPublicatie; }
+    public int       getIdCititor()     { return idCititor; }
+    public LocalDate getDataImprumut()  { return dataImprumut; }
+    public LocalDate getDataScadenta()  { return dataScadenta; }
+    public void      setDataScadenta(LocalDate d) { dataScadenta = d; }
+    public LocalDate getDataReturnare() { return dataReturnare; }
+    public void      setDataReturnare(LocalDate d) { dataReturnare = d; }
+    public int       getNumarReinnoiri(){ return numarReinnoiri; }
+    public void      setNumarReinnoiri(int n){ numarReinnoiri = n; }
+    public double    getPenalitate()    { return penalitate; }
+    public void      setPenalitate(double p){ penalitate = p; }
 
     @Override
     public String toString() {
         return "Imprumut:\n" +
-                "ID: " + this.id + "\n" +
-                "ID Publicatie: " + this.idPublicatie + "\n" +
-                "ID Cititor: " + this.idCititor + "\n" +
-                "Data imprumut: " + this.dataImprumut + "\n" +
-                "Data scadenta: " + this.dataScadenta + "\n" +
-                "Data returnare: " + this.dataReturnare + "\n" +
-                "Numar reinnoiri: " + this.numarReinnoiri + "\n" +
-                "Penalitate: " + this.penalitate + "\n";
+                "ID: "             + id             + "\n" +
+                "ID Publicatie: "  + idPublicatie   + "\n" +
+                "ID Cititor: "     + idCititor      + "\n" +
+                "Data imprumut: "  + dataImprumut   + "\n" +
+                "Data scadenta: "  + dataScadenta   + "\n" +
+                "Data returnare: " + dataReturnare  + "\n" +
+                "Numar reinnoiri: "+ numarReinnoiri + "\n" +
+                "Penalitate: "     + penalitate     + "\n";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
-        Imprumut imprumut = (Imprumut) o;
-        return this.id == imprumut.id;
+        if (!(o instanceof Imprumut imp)) return false;
+        return id != 0 && id == imp.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
-    }
-
-    public int getPublicatieId() {
-        return this.idPublicatie;
-    }
-
-    public int getCititorId() {
-        return this.idCititor;
-    }
-
-    public LocalDate getDataImprumut() {
-        return this.dataImprumut;
-    }
-
-    public double getPenalitate() {
-        if (this.dataReturnare == null) {
-            return 0.0;
-        }
-        if (this.dataReturnare.isAfter(this.dataScadenta)) {
-            long zileIntarziere = this.dataReturnare.toEpochDay() - this.dataScadenta.toEpochDay();
-            return zileIntarziere * 1.5;
-        }
-        return 0.0;
-    }
-
-    public int getIdCititor() {
-        return this.idCititor;
+        return Objects.hash(id);
     }
 }

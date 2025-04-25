@@ -2,8 +2,7 @@ package model;
 
 import java.util.Objects;
 
-public abstract class Persoana {
-    private static int idGenerator = 0;
+public abstract class Persoana implements Identifiable {
 
     protected int id;
     protected String nume;
@@ -12,77 +11,61 @@ public abstract class Persoana {
     protected String telefon;
     protected String username;
     protected String parola;
-    private boolean blocat = false;
+    private   boolean blocat = false;
 
-    public Persoana(String nume, String prenume, String email, String telefon, String username, String parola) {
-        this.id = ++idGenerator;
-        this.nume = nume;
-        this.prenume = prenume;
-        this.email = email;
-        this.telefon = telefon;
+    public Persoana(String nume,
+                    String prenume,
+                    String email,
+                    String telefon,
+                    String username,
+                    String parola) {
+
+        this.id       = 0;
+        this.nume     = nume;
+        this.prenume  = prenume;
+        this.email    = email;
+        this.telefon  = telefon;
         this.username = username;
-        this.parola = parola;
+        this.parola   = parola;
     }
 
-    public int getId() {
-        return this.id;
-    }
+    @Override
+    public Integer getId()        { return id; }
+    @Override
+    public void    setId(Integer id) { this.id = id; }
 
-    public String getNume() {
-        return this.nume;
-    }
+    public String  getNume()      { return nume; }
+    public String  getPrenume()   { return prenume; }
+    public String  getEmail()     { return email; }
+    public String  getTelefon()   { return telefon; }
+    public String  getUsername()  { return username; }
+    public String  getParola()    { return parola; }
 
-    public String getPrenume() {
-        return this.prenume;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getParola() {
-        return this.parola;
-    }
-
-    public boolean getBlocat() {
-        return blocat;
-    }
-    public void setBlocat(boolean blocat) {
-        this.blocat = blocat;
-    }
+    public boolean getBlocat()    { return blocat; }
+    public void    setBlocat(boolean blocat) { this.blocat = blocat; }
+    public void    setTelefon(String number) { this.telefon = number; }
 
     @Override
     public String toString() {
         return "Persoana:\n" +
-                "Id: " + this.id + "\n" +
-                "Nume: " + this.nume + "\n" +
-                "Prenume: " + this.prenume + "\n" +
-                "Email: " + this.email + "\n" +
-                "Telefon: " + this.telefon + "\n" +
-                "Username: " + this.username + "\n";
+                "Id: "       + id       + "\n" +
+                "Nume: "     + nume     + "\n" +
+                "Prenume: "  + prenume  + "\n" +
+                "Email: "    + email    + "\n" +
+                "Telefon: "  + telefon  + "\n" +
+                "Username: " + username + "\n";
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Persoana persoana)) return false;
-        return this.id == persoana.id;
+        if (this == o)                   return true;
+        if (!(o instanceof Persoana p))  return false;
+
+        return id != 0 && id == p.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public  String getTelefon(){
-        return this.telefon;
-    }
-
-    public void setTelefon(String number) {
-        this.telefon = number;
+        return Objects.hash(id);
     }
 }

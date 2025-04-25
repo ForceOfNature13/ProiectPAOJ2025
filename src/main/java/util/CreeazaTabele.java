@@ -50,7 +50,7 @@ public final class CreeazaTabele {
         CREATE TABLE IF NOT EXISTS publicatie (
             id              INT AUTO_INCREMENT PRIMARY KEY,
             titlu           VARCHAR(200) NOT NULL,
-            an_publicare    YEAR         NOT NULL,
+            an_publicare    INT        NOT NULL,
             nr_pagini       INT          NOT NULL,
             disponibil      BOOLEAN      DEFAULT TRUE,
             nr_imprumuturi  INT          DEFAULT 0,
@@ -132,14 +132,15 @@ public final class CreeazaTabele {
         );
         """,
             """
-        CREATE TABLE IF NOT EXISTS eveniment (
-            id             INT AUTO_INCREMENT PRIMARY KEY,
-            titlu          VARCHAR(200) NOT NULL,
-            descriere      TEXT         NOT NULL,
-            data           DATE         NOT NULL,
-            locatie        VARCHAR(150) NOT NULL,
-            capacitate_max INT          NOT NULL
-        );
+            CREATE TABLE IF NOT EXISTS eveniment (
+                id               INT AUTO_INCREMENT PRIMARY KEY,
+                titlu            VARCHAR(200) NOT NULL,
+                descriere        TEXT         NOT NULL,
+                data             DATE         NOT NULL,
+                locatie          VARCHAR(150) NOT NULL,
+                capacitate_max   INT          NOT NULL,
+                nr_participanti  INT          DEFAULT 0
+            );
         """,
             """
         CREATE TABLE IF NOT EXISTS eveniment_participant (
@@ -157,6 +158,7 @@ public final class CreeazaTabele {
     public static void creazaSchema() {
         try (Connection c = ConnectionManager.get().open();
              Statement st = c.createStatement()) {
+
 
             for (String sql : DDL) st.execute(sql);
 

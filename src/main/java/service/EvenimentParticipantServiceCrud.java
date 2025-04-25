@@ -17,7 +17,6 @@ public class EvenimentParticipantServiceCrud {
             INSTANCE = new EvenimentParticipantServiceCrud();
     public static EvenimentParticipantServiceCrud getInstance() { return INSTANCE; }
 
-    /* CREATE */
     public void create(EvenimentParticipant ep) {
         try (Connection c = ConnectionManager.get().open();
              PreparedStatement ps = c.prepareStatement(
@@ -29,7 +28,6 @@ public class EvenimentParticipantServiceCrud {
         }
     }
 
-    /* READ ALL */
     public List<EvenimentParticipant> readAll() {
         try (Connection c = ConnectionManager.get().open();
              Statement st = c.createStatement();

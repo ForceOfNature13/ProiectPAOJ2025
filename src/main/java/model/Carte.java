@@ -5,7 +5,7 @@ import exceptie.ResursaIndisponibilaExceptie;
 
 import java.util.List;
 
-public class Carte extends Publicatie implements Imprumutabil {
+public class Carte extends Publicatie{
 
     private final String ISBN;
     private final Editura editura;

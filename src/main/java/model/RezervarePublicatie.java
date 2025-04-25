@@ -10,12 +10,10 @@ public class RezervarePublicatie {
     private final int idPublicatie;
     private final Queue<Cititor> coadaAsteptare;
     private final int limitaMaxCoada=5;
-    private LocalDateTime dataRezervare;
 
     public RezervarePublicatie(int idPublicatie) {
         this.idPublicatie = idPublicatie;
         this.coadaAsteptare = new LinkedList<>();
-        this.dataRezervare = LocalDateTime.now();
     }
 
     public void adaugaInCoada(Cititor cititor) throws LimitaDepasitaExceptie {
@@ -81,25 +79,5 @@ public class RezervarePublicatie {
         return coadaAsteptare.peek().getId();
     }
 
-
-    public int getPozitie() {
-        int pozitie = 0;
-        for (Cititor cititor : coadaAsteptare) {
-            if (cititor.getId() == getIdCititor()) {
-                return pozitie;
-            }
-            pozitie++;
-        }
-        return -1;
-    }
-
-
-    public LocalDateTime getDataRezervare() {
-        return this.dataRezervare;
-    }
-
-    public void setDataRezervare(LocalDateTime dataRezervare) {
-        this.dataRezervare = dataRezervare;
-    }
 
 }

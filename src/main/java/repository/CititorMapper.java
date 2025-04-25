@@ -1,14 +1,17 @@
 package repository;
 
 import model.Cititor;
+import model.Imprumut;
+import service.ImprumutServiceCrud;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class CititorMapper implements RowMapper<Cititor>, StatementBinder<Cititor> {
 
     @Override
     public Cititor map(ResultSet rs) throws SQLException {
+
         Cititor c = new Cititor(
                 rs.getString("nume"),
                 rs.getString("prenume"),
@@ -17,9 +20,26 @@ public class CititorMapper implements RowMapper<Cititor>, StatementBinder<Citito
                 rs.getString("username"),
                 rs.getString("parola"),
                 rs.getString("adresa"),
-                rs.getInt("nr_max_imprumuturi")
+                rs.getInt   ("nr_max_imprumuturi")
         );
         c.setBlocat(rs.getBoolean("blocat"));
+        c.setId(rs.getInt("id"));
+        int idCit = c.getId();
+
+        List<Imprumut> imprumuturi = ImprumutServiceCrud.getInstance()
+                .readAll()
+                .stream()
+                .filter(i -> i.getIdCititor() == idCit)
+                .toList();
+
+        for (Imprumut i : imprumuturi) {
+            if (i.getDataReturnare() == null) {
+                c.adaugaImprumutActiv(i);
+            } else {
+                c.adaugaInIstoric(i);
+            }
+        }
+
         return c;
     }
 
@@ -48,10 +68,10 @@ public class CititorMapper implements RowMapper<Cititor>, StatementBinder<Citito
     @Override
     public void insertSecondary(Connection con, Cititor cit, int id) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO cititor(id,adresa,nr_max_imprumuturi,suma_penalizari) VALUES(?,?,?,?)")) {
-            ps.setInt(1, id);
+                "INSERT INTO cititor(id, adresa, nr_max_imprumuturi, suma_penalizari) VALUES (?,?,?,?)")) {
+            ps.setInt   (1, id);
             ps.setString(2, cit.getAdresa());
-            ps.setInt(3, cit.getNrMaxImprumuturi());
+            ps.setInt   (3, cit.getNrMaxImprumuturi());
             ps.setDouble(4, cit.getSumaPenalizari());
             ps.executeUpdate();
         }

@@ -28,4 +28,9 @@ public class RecenzieServiceCrud {
     public List<Recenzie> readAll()            { return repo.findAll(); }
     public void update(Recenzie r)             { repo.update(r, r.getId()); }
     public void delete(int id)                 { repo.deleteById(id); }
+
+    public List<Recenzie> findByCititor(int cititorId) {
+        String q = "SELECT * FROM recenzie WHERE cititor_id = ?";
+        return repo.findMany(q, cititorId);
+    }
 }

@@ -3,7 +3,6 @@ package repository;
 import model.Imprumut;
 
 import java.sql.*;
-import java.time.LocalDate;
 
 public class ImprumutMapper implements RowMapper<Imprumut>, StatementBinder<Imprumut> {
 
@@ -14,11 +13,14 @@ public class ImprumutMapper implements RowMapper<Imprumut>, StatementBinder<Impr
                 rs.getInt("cititor_id"),
                 rs.getDate("data_imprumut").toLocalDate(),
                 rs.getDate("data_scadenta").toLocalDate(),
-                rs.getDate("data_returnare") == null ? null :
-                        rs.getDate("data_returnare").toLocalDate()
+                rs.getDate("data_returnare") == null ? null
+                        : rs.getDate("data_returnare").toLocalDate()
         );
         i.setNumarReinnoiri(rs.getInt("numar_reinnoiri"));
         i.setPenalitate(rs.getDouble("penalitate"));
+
+        i.setId(rs.getInt("id"));
+
         return i;
     }
 

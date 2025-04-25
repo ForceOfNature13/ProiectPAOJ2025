@@ -15,7 +15,7 @@ public class EventBus implements Subject {
 
     private final List<Observer> observers = new CopyOnWriteArrayList<>();
     @Override public void registerObserver(Observer o)   { observers.add(o); }
-    @Override public void unregisterObserver(Observer o) { observers.remove(o); }
+
     @Override public void notifyObservers(String act)    { observers.forEach(o -> o.update(act)); }
 
     public static void publish(AuditAction act) {

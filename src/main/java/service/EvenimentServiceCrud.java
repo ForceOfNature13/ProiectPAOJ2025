@@ -3,10 +3,7 @@ package service;
 import model.Eveniment;
 import repository.EvenimentMapper;
 import repository.GenericJdbcRepository;
-import util.ConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +13,16 @@ public class EvenimentServiceCrud {
             new GenericJdbcRepository<>(
                     "eveniment",
                     "id",
-                    "INSERT INTO eveniment(titlu,descriere,data,locatie,capacitate_max) VALUES(?,?,?,?,?)",
-                    "UPDATE eveniment SET titlu=?,descriere=?,data=?,locatie=?,capacitate_max=? WHERE id=?",
+                    "INSERT INTO eveniment(" +
+                            "titlu, descriere, data, locatie, " +
+                            "capacitate_max, nr_participanti) " +
+                            "VALUES (?,?,?,?,?,?)",
+                    "UPDATE eveniment SET " +
+                    "UPDATE eveniment SET " +
+                            "titlu=?, descriere=?, data=?, locatie=?, " +
+                            "capacitate_max=?, nr_participanti=? " +
+                            "WHERE id = ?",
+
                     new EvenimentMapper(),
                     new EvenimentMapper()
             );

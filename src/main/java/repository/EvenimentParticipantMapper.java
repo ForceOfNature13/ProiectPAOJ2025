@@ -3,8 +3,8 @@ package repository;
 import model.EvenimentParticipant;
 import java.sql.*;
 
-public class EvenimentParticipantMapper implements RowMapper<EvenimentParticipant>,
-        StatementBinder<EvenimentParticipant> {
+public class EvenimentParticipantMapper
+        implements RowMapper<EvenimentParticipant>, StatementBinder<EvenimentParticipant> {
 
     @Override
     public EvenimentParticipant map(ResultSet rs) throws SQLException {
@@ -14,14 +14,12 @@ public class EvenimentParticipantMapper implements RowMapper<EvenimentParticipan
         );
     }
 
-
     @Override
-    public void bindForInsert(PreparedStatement ps,
-                              EvenimentParticipant ep) throws SQLException {
+    public void bindForInsert(PreparedStatement ps, EvenimentParticipant ep) throws SQLException {
         ps.setInt(1, ep.evenimentId());
         ps.setInt(2, ep.cititorId());
     }
 
-    @Override public void bindForUpdate(PreparedStatement ps,
-                                        EvenimentParticipant ep) { }
+    @Override
+    public void bindForUpdate(PreparedStatement ps, EvenimentParticipant ep) { }
 }

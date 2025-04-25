@@ -7,52 +7,60 @@ import model.Bibliotecar;
 import model.Cititor;
 import model.Persoana;
 import model.RolBibliotecar;
-
 import observer.EventBus;
 import audit.AuditAction;
+import util.ParolaUtil;
 
-import java.util.Map;
+import java.util.Optional;
 
 public class AuthService {
 
     private static AuthService instance;
     private Persoana utilizatorCurent;
 
-    private AuthService() { this.utilizatorCurent = null; }
+    private AuthService() { }
 
     public static AuthService getInstance() {
         if (instance == null) instance = new AuthService();
         return instance;
     }
 
-    public void login(String username,
-                      String parola,
-                      Map<Integer, Cititor> cititori,
-                      Map<Integer, Bibliotecar> bibliotecari)
-            throws AutentificareExceptie {
+    private Optional<Cititor> findCititor(String username) {
+        return CititorServiceCrud.getInstance()
+                .readAll()
+                .stream()
+                .filter(c -> c.getUsername().equals(username))
+                .findFirst();
+    }
 
-        for (Cititor c : cititori.values()) {
-            if (c.getUsername().equals(username)) {
-                if (c.getBlocat())
-                    throw new AutentificareExceptie(CodAutentificare.CONT_BLOCAT);
-                if (!c.getParola().equals(parola))
-                    throw new AutentificareExceptie(CodAutentificare.PAROLA_GRESITA);
-                utilizatorCurent = c;
-                EventBus.publish(AuditAction.AUTENTIFICARE_REUSITA);
-                return;
-            }
+    private Optional<Bibliotecar> findBibliotecar(String username) {
+        return BibliotecarServiceCrud.getInstance()
+                .readAll()
+                .stream()
+                .filter(b -> b.getUsername().equals(username))
+                .findFirst();
+    }
+
+    public void login(String username, String parola) throws AutentificareExceptie {
+
+        Optional<Cititor> oc = findCititor(username);
+        if (oc.isPresent()) {
+            Cititor c = oc.get();
+            if (c.getBlocat())               throw new AutentificareExceptie(CodAutentificare.CONT_BLOCAT);
+            if (!ParolaUtil.verify(parola, c.getParola())) throw new AutentificareExceptie(CodAutentificare.PAROLA_GRESITA);
+            utilizatorCurent = c;
+            EventBus.publish(AuditAction.AUTENTIFICARE_REUSITA);
+            return;
         }
 
-        for (Bibliotecar b : bibliotecari.values()) {
-            if (b.getUsername().equals(username)) {
-                if (b.getBlocat())
-                    throw new AutentificareExceptie(CodAutentificare.CONT_BLOCAT);
-                if (!b.getParola().equals(parola))
-                    throw new AutentificareExceptie(CodAutentificare.PAROLA_GRESITA);
-                utilizatorCurent = b;
-                EventBus.publish(AuditAction.AUTENTIFICARE_REUSITA);
-                return;
-            }
+        Optional<Bibliotecar> ob = findBibliotecar(username);
+        if (ob.isPresent()) {
+            Bibliotecar b = ob.get();
+            if (b.getBlocat())               throw new AutentificareExceptie(CodAutentificare.CONT_BLOCAT);
+            if (!ParolaUtil.verify(parola, b.getParola())) throw new AutentificareExceptie(CodAutentificare.PAROLA_GRESITA);
+            utilizatorCurent = b;
+            EventBus.publish(AuditAction.AUTENTIFICARE_REUSITA);
+            return;
         }
 
         throw new AutentificareExceptie(CodAutentificare.USER_INEXISTENT);
@@ -64,10 +72,8 @@ public class AuthService {
         EventBus.publish(AuditAction.DELOGARE);
     }
 
-    public void verificaBibliotecar(RolBibliotecar rolDorit)
-            throws AccesInterzisExceptie {
-        if (!(utilizatorCurent instanceof Bibliotecar bibl) ||
-                bibl.getRol() != rolDorit)
+    public void verificaBibliotecar(RolBibliotecar rolDorit) throws AccesInterzisExceptie {
+        if (!(utilizatorCurent instanceof Bibliotecar b) || b.getRol() != rolDorit)
             throw new AccesInterzisExceptie();
     }
 

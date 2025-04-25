@@ -6,7 +6,11 @@ import factory.*;
 import model.*;
 import service.AuthService;
 import service.BibliotecaService;
+import service.EdituraServiceCrud;
 import service.EvenimentService;
+import util.CreeazaTabele;
+import util.ParolaUtil;
+import util.StergeTabele;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,9 +24,13 @@ public class Main {
 
     public static void main(String[] args) {
 
+        StergeTabele.stergeSchema();
+        CreeazaTabele.creazaSchema();
+
         AuditService.initObserver();
 
         BibliotecaService bibliotecaService = BibliotecaService.getInstance();
+        EvenimentService.getInstance().preloadCache();
         initData(bibliotecaService);
 
         boolean running = true;
@@ -35,7 +43,7 @@ public class Main {
             String opt = scanner.nextLine();
 
             switch (opt) {
-                case "1" -> doLogin(bibliotecaService);
+                case "1" -> doLogin();
                 case "2" -> doRegister(bibliotecaService);
                 case "3" -> {
                     System.out.println("La revedere!");
@@ -46,7 +54,7 @@ public class Main {
         }
     }
 
-    private static void doLogin(BibliotecaService svc) {
+    private static void doLogin() {
 
         AuthService auth = AuthService.getInstance();
 
@@ -56,18 +64,16 @@ public class Main {
         String pass = scanner.nextLine();
 
         try {
-            auth.login(user, pass, svc.getCititoriMap(), svc.getBibliotecariMap());
+            auth.login(user, pass);
         } catch (AutentificareExceptie e) {
             System.out.println(e.getMessage());
             return;
         }
 
         Persoana curent = auth.getUtilizatorCurent();
-        if (curent instanceof Cititor)      meniuCititor();
+        if (curent instanceof Cititor) meniuCititor();
         else if (curent instanceof Bibliotecar) meniuBibliotecar();
     }
-
-
     private static void doRegister(BibliotecaService bibliotecaService) {
         System.out.print("Nume: ");
         String nume = scanner.nextLine();
@@ -80,7 +86,7 @@ public class Main {
         System.out.print("Username: ");
         String username = scanner.nextLine();
         System.out.print("Parola: ");
-        String parola = scanner.nextLine();
+        String parolaHashed = ParolaUtil.hash(scanner.nextLine());
         System.out.print("Adresa: ");
         String adresa = scanner.nextLine();
 
@@ -92,7 +98,7 @@ public class Main {
                     .email(email)
                     .telefon(telefon)
                     .username(username)
-                    .parola(parola)
+                    .parola(parolaHashed)
                     .adresa(adresa)
                     .nrMax(3)
                     .build();
@@ -100,9 +106,9 @@ public class Main {
             throw new RuntimeException(e);
         }
         bibliotecaService.adaugaCititor(c);
-
         System.out.println("Cititor inregistrat cu succes!");
     }
+
 
     private static void meniuCititor() {
         AuthService authService = AuthService.getInstance();
@@ -175,7 +181,6 @@ public class Main {
 
         while (running) {
             System.out.println("\n===== MENIU BIBLIOTECAR =====");
-            System.out.println("== (Contine optiunile cititorului) ==");
             System.out.println("1. Listare toate publicatiile");
             System.out.println("2. Cautare dupa titlu");
             System.out.println("3. Cautare dupa autor");
@@ -188,24 +193,19 @@ public class Main {
             System.out.println("10. Sorteaza dupa nr. de imprumuturi");
             System.out.println("11. Sorteaza dupa titlu");
             System.out.println("12. Imprumuta publicatie");
-            System.out.println("13. Returneaza publicatie");
-            System.out.println("14. Rezerva publicatie");
-            System.out.println("15. Reinnoieste imprumut");
-            System.out.println("16. Adauga recenzie");
-            System.out.println("17. Afiseaza recenzii");
-            System.out.println("18. Listare evenimente");
-            System.out.println("19. Inscriere la eveniment");
-            System.out.println("20. Vizualizare imprumuturi active");
-            System.out.println("21. Vizualizare istoric imprumuturi");
-            System.out.println("22. Vizualizare amenzi");
-            System.out.println("== Optiuni administrative ==");
-            System.out.println("23. Adauga publicatie");
-            System.out.println("24. Sterge publicatie");
-            System.out.println("25. Creeaza eveniment");
-            System.out.println("26. Sterge eveniment");
-            System.out.println("27. Blocheaza utilizator");
-            System.out.println("28. Deblocheaza utilizator");
-            System.out.println("29. Adauga bibliotecar STAFF");
+            System.out.println("13. Afiseaza recenziile unui cititor");
+            System.out.println("14. Afiseaza recenziile unei publicatii");
+            System.out.println("15. Listare evenimente");
+            System.out.println("16. Vizualizare imprumuturi active ale unui cititor");
+            System.out.println("17. Vizualizare istoric imprumuturi ale unui cititor");
+            System.out.println("18. Vizualizare amenzi unui cititor");
+            System.out.println("19. Adauga publicatie");
+            System.out.println("20. Sterge publicatie");
+            System.out.println("21. Creeaza eveniment");
+            System.out.println("22. Sterge eveniment");
+            System.out.println("23. Blocheaza utilizator");
+            System.out.println("24. Deblocheaza utilizator");
+            System.out.println("25. Adauga bibliotecar STAFF");
             System.out.println("0. Logout");
 
             System.out.print("Alege optiunea: ");
@@ -224,23 +224,19 @@ public class Main {
                 case "10" -> sortareDupaNrImprumuturi();
                 case "11" -> sortareDupaTitlu();
                 case "12" -> imprumutaPublicatie();
-                case "13" -> returneazaPublicatie();
-                case "14" -> rezervaPublicatie();
-                case "15" -> reinnoiesteImprumut();
-                case "16" -> adaugaRecenzie();
-                case "17" -> afiseazaRecenziiPublicatie();
-                case "18" -> listareEvenimente();
-                case "19" -> inscriereEveniment();
-                case "20" -> vizualizareImprumuturiActive();
-                case "21" -> vizualizareIstoricImprumuturi();
-                case "22" -> vizualizareAmenzi();
-                case "23" -> adaugaPublicatieBibliotecar();
-                case "24" -> stergePublicatieBibliotecar();
-                case "25" -> creeazaEvenimentBibliotecar();
-                case "26" -> stergeEvenimentBibliotecar();
-                case "27" -> blocheazaUtilizator();
-                case "28" -> deblocheazaUtilizator();
-                case "29" -> adaugaBibliotecarStaff();
+                case "13" -> afiseazaRecenziiUtilizator();
+                case "14" -> afiseazaRecenziiPublicatie();
+                case "15" ->  listareEvenimente();
+                case "16" -> imprumuturiActiveCititor();
+                case "17" -> istoricImprumuturiCititor();
+                case "18" -> amenziCititor();
+                case "19" -> adaugaPublicatieBibliotecar();
+                case "20" -> stergePublicatieBibliotecar();
+                case "21" -> creeazaEvenimentBibliotecar();
+                case "22" -> stergeEvenimentBibliotecar();
+                case "23" -> blocheazaUtilizator();
+                case "24" -> deblocheazaUtilizator();
+                case "25" -> adaugaBibliotecarStaff();
                 case "0" -> {
                     authService.logout();
                     running = false;
@@ -291,7 +287,6 @@ public class Main {
         boolean disp = Boolean.parseBoolean(scanner.nextLine());
         svc.cautaDupaDisponibilitate(disp).forEach(System.out::println);
     }
-
 
     private static void cautareComplexa() {
         BibliotecaService svc = BibliotecaService.getInstance();
@@ -344,16 +339,6 @@ public class Main {
         try {
             svc.imprumutaPublicatie(idPub, cititor.getId());
             System.out.println("Imprumut realizat!");
-            /* ===== BLOCAJ TEST PENALIZARE =====
-            // forteaza scadenta cu 3 zile in urma pentru a verifica penalizarea
-
-            Imprumut impr = cititor.gasesteImprumutActiv(idPub);
-            if (impr != null) {
-                impr.setDataScadenta(java.time.LocalDate.now().minusDays(3));
-                System.out.println("(DEBUG) Scadenta mutata in trecut cu 3 zile.");
-            }*/
-
-            /* ================================== */
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -372,10 +357,10 @@ public class Main {
         int idPub = Integer.parseInt(scanner.nextLine());
         try {
             svc.returneazaPublicatie(idPub, cititor.getId());
-            System.out.println("Returnare cu succes!");
-        } catch (EntitateInexistentaExceptie e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        System.out.println("Returnare cu succes!");
     }
 
     private static void rezervaPublicatie() {
@@ -468,7 +453,6 @@ public class Main {
         }
     }
 
-
     private static void inscriereEveniment() {
         AuthService auth = AuthService.getInstance();
         if (!(auth.getUtilizatorCurent() instanceof Cititor cititor)) {
@@ -491,29 +475,47 @@ public class Main {
     private static void vizualizareImprumuturiActive() {
         AuthService auth = AuthService.getInstance();
         if (auth.getUtilizatorCurent() instanceof Cititor cititor) {
-            cititor.getListaImprumuturiActive().forEach(System.out::println);
+            var list = cititor.getListaImprumuturiActive();
+            if (list.isEmpty()) {
+                System.out.println("Nu aveti imprumuturi active.");
+            } else {
+                list.forEach(System.out::println);
+            }
         } else {
-            System.out.println("Doar cititorii au imprumuturi!");
+            System.out.println("Doar cititorii au împrumuturi!");
         }
     }
+
 
     private static void vizualizareIstoricImprumuturi() {
         AuthService auth = AuthService.getInstance();
         if (auth.getUtilizatorCurent() instanceof Cititor cititor) {
-            cititor.getIstoric().forEach(System.out::println);
+            var ist = cititor.getIstoric();
+            if (ist.isEmpty()) {
+                System.out.println("Istoricul este gol – niciun Imprumut returnat.");
+            } else {
+                ist.forEach(System.out::println);
+            }
         } else {
             System.out.println("Doar cititorii au istoric!");
         }
     }
 
+
     private static void vizualizareAmenzi() {
         AuthService auth = AuthService.getInstance();
         if (auth.getUtilizatorCurent() instanceof Cititor cititor) {
-            System.out.println("Suma penalizari: " + cititor.getSumaPenalizari());
+            double suma = cititor.getSumaPenalizari();
+            if (suma == 0) {
+                System.out.println("Nu aveti amenzi.");
+            } else {
+                System.out.printf("Total amenzi: %.2f%n", suma);
+            }
         } else {
             System.out.println("Doar cititorii pot vedea amenzi!");
         }
     }
+
 
     private static void adaugaPublicatieBibliotecar() {
         BibliotecaService svc = BibliotecaService.getInstance();
@@ -545,13 +547,17 @@ public class Main {
             if (!aIn.isBlank())
                 Arrays.stream(aIn.split(",")).map(String::trim).forEach(autori::add);
 
-            Map<String,Object> extra = new HashMap<>();
+            Map<String, Object> extra = new HashMap<>();
             PublicatieFactory factory = switch (tip) {
                 case "1" -> {
                     System.out.print("ISBN: ");
                     extra.put("isbn", scanner.nextLine().trim());
 
-                    extra.put("editura", new Editura(1,"DefaultEditura","Romania"));
+                    Editura edDefault = new Editura(0, "DefaultEditura", "Romania");
+                    int newId = EdituraServiceCrud.getInstance().create(edDefault);
+                    edDefault = new Editura(newId, edDefault.nume(), edDefault.tara());
+                    extra.put("editura", edDefault);
+
                     System.out.print("Categorie: ");
                     extra.put("categorie", scanner.nextLine().trim());
 
@@ -602,7 +608,6 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
-
 
     private static void stergePublicatieBibliotecar() {
         BibliotecaService svc = BibliotecaService.getInstance();
@@ -673,7 +678,6 @@ public class Main {
         }
     }
 
-
     private static void stergeEvenimentBibliotecar() {
         AuthService auth = AuthService.getInstance();
         if (!(auth.getUtilizatorCurent() instanceof Bibliotecar b) || b.getRol() != RolBibliotecar.ADMIN) {
@@ -693,9 +697,12 @@ public class Main {
     }
 
     private static void listareEvenimente() {
-        EvenimentService.getInstance()
-                .listareEvenimente()
-                .forEach(System.out::println);
+        var evs = EvenimentService.getInstance().listareEvenimente();
+        if (evs.isEmpty()) {
+            System.out.println("Nu exista evenimente programate.");
+        } else {
+            evs.forEach(System.out::println);
+        }
     }
 
     private static void blocheazaUtilizator() {
@@ -704,7 +711,9 @@ public class Main {
         try {
             BibliotecaService.getInstance().blocheazaUtilizator(id);
             System.out.println("Utilizator blocat.");
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void deblocheazaUtilizator() {
@@ -713,17 +722,25 @@ public class Main {
         try {
             BibliotecaService.getInstance().deblocheazaUtilizator(id);
             System.out.println("Utilizator deblocat.");
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void adaugaBibliotecarStaff() {
         try {
-            System.out.print("Nume: ");    String nume = scanner.nextLine();
-            System.out.print("Prenume: "); String pren = scanner.nextLine();
-            System.out.print("Email: ");   String email = scanner.nextLine();
-            System.out.print("Telefon: "); String tel = scanner.nextLine();
-            System.out.print("Username: ");String user = scanner.nextLine();
-            System.out.print("Parola: ");  String pass = scanner.nextLine();
+            System.out.print("Nume: ");
+            String nume = scanner.nextLine();
+            System.out.print("Prenume: ");
+            String pren = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+            System.out.print("Telefon: ");
+            String tel = scanner.nextLine();
+            System.out.print("Username: ");
+            String user = scanner.nextLine();
+            System.out.print("Parola: ");
+            String passHashed = ParolaUtil.hash(scanner.nextLine());
 
             Bibliotecar b = new BibliotecarBuilder()
                     .nume(nume)
@@ -731,44 +748,152 @@ public class Main {
                     .email(email)
                     .telefon(tel)
                     .username(user)
-                    .parola(pass)
+                    .parola(passHashed)
                     .sectie("Sectie necunoscuta")
                     .data(java.time.LocalDate.now())
                     .build();
 
             BibliotecaService.getInstance().adaugaBibliotecarStaff(b);
             System.out.println("Bibliotecar STAFF adaugat, ID " + b.getId());
-        } catch (Exception e) { System.out.println(e.getMessage()); }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
+    private static void afiseazaRecenziiUtilizator() {
+        BibliotecaService svc = BibliotecaService.getInstance();
+
+        System.out.print("ID cititor: ");
+        int idCit;
+        try {
+            idCit = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("ID invalid!");
+            return;
+        }
+
+        try {
+            var recs = svc.getRecenziiCititor(idCit);
+
+            if (recs.isEmpty()) {
+                System.out.println("Cititorul nu a scris nicio recenzie.");
+            } else {
+                recs.forEach(System.out::println);
+            }
+        } catch (EntitateInexistentaExceptie | AccesInterzisExceptie e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private static void imprumuturiActiveCititor() {
+        BibliotecaService svc = BibliotecaService.getInstance();
+        System.out.print("ID cititor: ");
+        int id;
+        try { id = Integer.parseInt(scanner.nextLine()); }
+        catch (NumberFormatException e) { System.out.println("ID invalid!"); return; }
+
+        try {
+            var loans = svc.getImprumuturiActiveCititor(id);
+            if (loans.isEmpty()) {
+                System.out.println("Cititorul nu are împrumuturi active.");
+            } else {
+                loans.forEach(System.out::println);
+            }
+        } catch (EntitateInexistentaExceptie | AccesInterzisExceptie e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    private static void istoricImprumuturiCititor() {
+        BibliotecaService svc = BibliotecaService.getInstance();
+
+        System.out.print("ID cititor: ");
+        int id;
+        try { id = Integer.parseInt(scanner.nextLine()); }
+        catch (NumberFormatException e) { System.out.println("ID invalid!"); return; }
+
+        try {
+            var loans = svc.getIstoricReturnatCititor(id);
+
+            if (loans.isEmpty()) {
+                System.out.println("Cititorul nu are împrumuturi returnate în istoric.");
+            } else {
+                loans.forEach(System.out::println);
+            }
+        } catch (EntitateInexistentaExceptie | AccesInterzisExceptie e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private static void amenziCititor() {
+        BibliotecaService svc = BibliotecaService.getInstance();
+
+        System.out.print("ID cititor: ");
+        int id;
+        try { id = Integer.parseInt(scanner.nextLine()); }
+        catch (NumberFormatException e) { System.out.println("ID invalid!"); return; }
+
+        try {
+            var penalizari = svc.getAmenziCititor(id);
+
+            if (penalizari.isEmpty()) {
+                System.out.println("Cititorul nu are amenzi.");
+            } else {
+                double total = penalizari.stream()
+                        .mapToDouble(Imprumut::getPenalitate)
+                        .sum();
+
+                System.out.println("Amenzi detaliate:");
+                penalizari.forEach(System.out::println);
+                System.out.printf("Total amenzi: %.2f%n", total);
+            }
+        } catch (EntitateInexistentaExceptie | AccesInterzisExceptie e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
     private static void initData(BibliotecaService svc) {
+        if (!svc.getBibliotecariMap().isEmpty()) return;
+
         Bibliotecar admin = new Bibliotecar(
                 "Popescu", "Ion", "ion@example.com", "0712345678",
-                "admin", "admin", "Sectie centrala", LocalDate.now());
+                "admin",
+                ParolaUtil.hash("admin"),
+                "Sectie centrala", LocalDate.now());
         admin.setRol(RolBibliotecar.ADMIN);
         svc.adaugaBibliotecar(admin);
 
         Bibliotecar staff = new Bibliotecar(
                 "Ionescu", "Maria", "maria@example.com", "0722345678",
-                "maria", "maria123", "Sectie adulti", LocalDate.now());
+                "maria",
+                ParolaUtil.hash("maria123"),
+                "Sectie adulti", LocalDate.now());
         staff.setRol(RolBibliotecar.STAFF);
         svc.adaugaBibliotecar(staff);
 
         Cititor cit = new Cititor(
                 "Georgescu", "Ana", "ana@example.com", "0700000000",
-                "ana", "pass123", "Str. Libertatii, 1", 3);
+                "ana",
+                ParolaUtil.hash("pass123"),      
+                "Str. Libertatii, 1", 3);
         svc.adaugaCititor(cit);
+
+
+
+        Editura edX = new Editura(0, "EdituraX", "Romania");
+        int idX = EdituraServiceCrud.getInstance().create(edX);
+        edX = new Editura(idX, edX.nume(), edX.tara());
 
         Carte c = new Carte(
                 "Povesti", 2001, 150, true,
                 new ArrayList<>(),
                 Arrays.asList("Ion Creanga", "Ion Popescu"),
                 "ISBN1",
-                new Editura(1, "EdituraX", "Romania"),
+                edX,
                 "Copii"
         );
         svc.adaugaPublicatie(c);
-
 
         Revista r = new Revista(
                 "Revista Tehnica", 2022, 40, true,

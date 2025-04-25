@@ -21,7 +21,7 @@ public class RezervareConflictHandler implements ImprumutValidationHandler {
         RezervarePublicatie rez = rezervari.get(p.getId());
         if (rez != null && !rez.esteGoala()) {
             var primul = rez.vizualizeazaUrmatorul();
-            if (primul != null && primul.getId() != c.getId())
+            if (primul != null && !primul.getId().equals(c.getId()))
                 throw new ResursaIndisponibilaExceptie(
                         MotivIndisponibilitate.REZERVATA, p.getId());
         }

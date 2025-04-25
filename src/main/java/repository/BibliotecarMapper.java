@@ -21,6 +21,11 @@ public class BibliotecarMapper implements RowMapper<Bibliotecar>, StatementBinde
         );
         b.setRol(RolBibliotecar.valueOf(rs.getString("rol")));
         b.setBlocat(rs.getBoolean("blocat"));
+
+
+        b.setId(rs.getInt("id"));
+
+
         return b;
     }
 

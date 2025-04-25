@@ -1,91 +1,218 @@
-<div class="smartlib-container">
-  <h1 class="smartlib-hero-title">🏛️ SmartLibrary</h1>
-  <p class="smartlib-subtitle">Soluție modernă pentru gestionarea inteligentă a bibliotecilor – Java 21, arhitectură scalabilă.</p>
+# 🏛️ **SmartLibrary**
 
-  <details open>
-    <summary>📌 Detalii proiect</summary>
-    <p>📖 SmartLibrary revoluționează activitatea bibliotecilor prin catalogare avansată, împrumuturi instant, cozi de rezervare optimizate și evenimente culturale integrate.</p>
-    <ul>
-      <li>📚 <strong>29 CLI</strong> – comenzi complete pentru operațiuni zilnice</li>
-      <li>☕ <strong>Java 21</strong> – Records, switch-expressions, Stream API</li>
-      <li>🛡️ <strong>Audit Async</strong> – EventBus → AuditService (thread dedicat, LinkedBlockingQueue)</li>
-      <li>🏫 <strong>User-centric</strong> – UI intuitivă, cozi FIFO de rezervare, penalizări automate, roluri STAFF/ADMIN</li>
-    </ul>
-  </details>
+### Java 21 · MySQL 8 · Maven 3.9 · JDBC
 
-  <details>
-    <summary>📋 Comenzi & Interogări</summary>
-    <ol>
-      <li>📚 Listare publicații</li>
-      <li>🔍 Căutare după titlu</li>
-      <li>✍️ Căutare după autor</li>
-      <li>🗂️ Căutare după categorie</li>
-      <li>⏳ Căutare după interval de ani</li>
-      <li>🚦 Căutare după disponibilitate</li>
-      <li>🧮 Căutare complexă + sortare multiplă</li>
-      <li>🗓️ Sortare după anul publicării</li>
-      <li>⭐ Sortare după rating</li>
-      <li>🔢 Sortare după nr. de împrumuturi</li>
-      <li>🔠 Sortare alfabetică</li>
-      <li>📥 Împrumută publicație</li>
-      <li>📤 Returnează publicație + penalizare</li>
-      <li>📌 Rezervă publicație (FIFO)</li>
-      <li>🔄 Reînnoiește împrumut</li>
-      <li>📝 Adaugă recenzie</li>
-      <li>👀 Vezi recenzii + rating mediu</li>
-      <li>📅 Listare evenimente</li>
-      <li>🏷️ Înscriere la eveniment</li>
-      <li>📑 Vizualizare împrumuturi active</li>
-      <li>📂 Istoric împrumuturi</li>
-      <li>💰 Vizualizare penalizări</li>
-      <li>➕ Adaugă publicație</li>
-      <li>❌ Șterge publicație</li>
-      <li>✨ Creează eveniment</li>
-      <li>🗑️ Șterge eveniment</li>
-      <li>🔒 Blochează utilizator</li>
-      <li>🔓 Deblochează utilizator</li>
-      <li>👩‍💼 Adaugă bibliotecar STAFF</li>
-    </ol>
-  </details>
+*All‑in‑one toolchain for next‑gen library management*
 
-  <details>
-    <summary>🧩 Model</summary>
-    <table>
-      <thead>
-        <tr><th>Entitate</th><th>Descriere</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>📗 Carte</td><td>ISBN · Editură · Categorie</td></tr>
-        <tr><td>📰 Revistă</td><td>Frecvență · Număr</td></tr>
-        <tr><td>🎧 Audiobook</td><td>Durată · Naratori · Format</td></tr>
-        <tr><td>🏷️ Publicație</td><td>Abstractă, atribute comune</td></tr>
-        <tr><td>🙋 Cititor</td><td>Împrumuturi · Recenzii · Penalizări</td></tr>
-        <tr><td>👩‍💼 Bibliotecar</td><td>Rol STAFF / ADMIN</td></tr>
-        <tr><td>🔄 Împrumut</td><td>Date împrumut / returnare</td></tr>
-        <tr><td>⏳ RezervarePublicatie</td><td>Coadă FIFO</td></tr>
-        <tr><td>📆 Eveniment</td><td>Dată · Locație · Capacitate</td></tr>
-        <tr><td>⭐ Recenzie</td><td>Rating ★ + Comentariu</td></tr>
-        <tr><td>🏢 Editura</td><td>Record imutabil (`record`)</td></tr>
-        <tr><td>🧑 Persoană</td><td>Abstractă (bază utilizatori)</td></tr>
-        <tr><td>🛡️ RolBibliotecar</td><td>Enum STAFF, ADMIN</td></tr>
-      </tbody>
-    </table>
-  </details>
+> **SmartLibrary aduce vibe‑ul digital în bibliotecă**: catalogare instant, împrumuturi fără fricțiune, cozi FIFO transparente și evenimente culturale integrate. Totul orchestrat printr‑un CLI elegant, cu audit live și securitate *iron‑clad*.
 
-  <details>
-    <summary>🔧 Arhitectură & Concepte</summary>
-    <ul>
-      <li>🔸 <strong>POO</strong> – Moștenire, Polimorfism, Încapsulare prin clase abstracte și interfețe (Imprumutabil)</li>
-      <li>🔸 <strong>Java 21</strong> – record pentru Editura, enum pentru RolBibliotecar, Stream API (filter, map, sorted)</li>
-      <li>🔸 <strong>Colecții</strong> – ArrayList, HashMap, TreeSet, LinkedList pentru stocare și cozi FIFO</li>
-      <li>🔸 <strong>Excepții personalizate</strong> – AccesInterzisExceptie, ResursaIndisponibilaExceptie, LimitaDepasitaExceptie</li>
-      <li>🔹 <strong>Singleton</strong> – serviciile principale (AuthService, BibliotecaService, AuditService)</li>
-      <li>🔹 <strong>Factory</strong> – instanțierea publicațiilor (CarteFactory, RevistaFactory, AudiobookFactory)</li>
-      <li>🔹 <strong>Builder</strong> – pentru obiecte complexe (CititorBuilder, EvenimentBuilder)</li>
-      <li>🔹 <strong>Strategy</strong> – sortări dinamice prin SortContext și comparatoare</li>
-      <li>🔹 <strong>Chain of Responsibility</strong> – validare lanț (LimitaImprumuturiHandler → CoadaRezervariPlinaHandler)</li>
-      <li>🔹 <strong>Observer</strong> – audit asincron (EventBus → AuditService)</li>
-      <li>🔹 <strong>DTO</strong> – PublicatieDTO pentru transfer de date între straturi</li>
-    </ul>
-  </details>
-</div>
+---
+
+## 📖 Cuprins
+
+- [Caracteristici](#caracteristici)
+- [Instalare rapidă](#instalare-rapidă)
+- [Diagramă BD](#diagramă-bd)
+- [Arhitectură](#arhitectură)
+- [Model de domeniu](#model-de-domeniu)
+- [CLI](#cli)
+- [Cum funcționează](#cum-funcționează)
+- [Stack & Pattern‑uri](#stack--pattern‑uri)
+- [Roadmap](#roadmap)
+- [Licență](#licență)
+
+---
+
+## ✨ Caracteristici
+
+| 🚀  | Feature                                                      |
+| --- | ------------------------------------------------------------ |
+| 💾  | Persistență **MySQL 8 + JDBC** (repository generic)          |
+| 🔒  | Hashing parole cu **BCrypt** (12 rounds)                     |
+| 🛠️ | Creare / resetare automată schemă la start‑up                |
+| 📝  | Audit **asincron** (`EventBus → AuditService` → `audit.csv`) |
+| 🚀  | Cache în memorie pentru evenimente populare                  |
+| ⌨️  | **38 comenzi CLI** (funcționalități complete)                |
+| 🧪  | Teste unitare **JUnit 5 + Mockito**                          |
+| 💬  | UI text‑based prietenoasă, cu highlight pe interacțiuni      |
+
+---
+
+## ⚙️ Instalare rapidă
+
+```bash
+# 1️⃣ Clonare
+git clone https://github.com/username/SmartLibrary.git
+cd SmartLibrary
+
+# 2️⃣ Build
+mvn clean package
+
+# 3️⃣ Pornire
+java -jar target/smartlibrary.jar
+```
+
+> ▶️ La prima rulare, aplicația creează automat baza de date (dacă nu există) și populează date demo.
+
+---
+
+## 🗂️ Diagramă BD
+
+![Diagramă ER](docs/erdiagram.png)
+
+## 🏗️ Arhitectură
+
+```
+               ┌──────────┐  commands   ┌────────────────┐
+               │   CLI    │ ───────────►│ Service Layer  │
+               └──────────┘             └────────────────┘
+                                          │  ▲
+                              cache hit   │  │  cache miss / JDBC
+                                          │  │
+                                          ▼  │
+                                        ┌──────────┐
+                                        │  Cache   │
+                                        └──────────┘
+                                          │
+                                          ▼
+               ┌──────────┐  JDBC   ┌────────────────┐
+               │ MySQL 8  │ ◄────── │  Repository    │
+               └──────────┘         └────────────────┘
+                                          │
+                                   events │
+                                          ▼
+                                        ┌──────────┐
+                                        │ EventBus │
+                                        └──────────┘
+                                          │
+                                          ▼
+                                        ┌──────────┐
+                                        │ AuditSvc │
+                                        └──────────┘
+```
+
+- **Layered** – UI ▸ Service ▸ Repository ▸ DB
+- **Cache** – evenimente populare păstrate in‑memory
+- **Audit asincron** – EventBus ⇒ Audit Service
+- **Patterns** – Singleton · Factory · Builder · Repository · Strategy · CoR · Observer
+
+---
+
+## 🧩 Model de domeniu
+
+| Entitate          | Cheie                        | Tabel                  |
+| ----------------- | ---------------------------- | ---------------------- |
+| 📗 Carte          | ISBN, Editură                | `carte`                |
+| 📰 Revistă        | Frecvență, Număr             | `revista`              |
+| 🎧 Audiobook      | Durată, Naratori             | `audiobook`            |
+| 🙋 Cititor        | Împrumuturi, Penalizări      | `cititor`              |
+| 👩‍💼 Bibliotecar | Rol (`STAFF` / `ADMIN`)      | `bibliotecar`          |
+| 🔄 Împrumut       | Dată start / end, penalitate | `imprumut`             |
+| ⏳ Rezervare       | Cozi FIFO                    | `rezervare_publicatie` |
+| ⭐ Recenzie        | Rating, comentariu           | `recenzie`             |
+| 📆 Eveniment      | Dată, Locație, Capacitate    | `eveniment`            |
+| 🏢 Editura        | Record imutabil              | `editura`              |
+
+---
+
+## ⌨️ CLI
+
+### 👩‍💼 Bibliotecar — Admin & Staff
+
+```text
+1.  📚  Listare toate publicatiile
+2.  🔍  Cautare dupa titlu
+3.  🖋️  Cautare dupa autor
+4.  🏷️  Cautare dupa categorie
+5.  📅  Cautare dupa interval de ani
+6.  ✅  Cautare dupa disponibilitate
+7.  🧩  Cautare complexa
+8.  🗓️  Sorteaza dupa anul publicarii
+9.  ⭐  Sorteaza dupa rating
+10. 🔢  Sorteaza dupa nr. de imprumuturi
+11. 🔠  Sorteaza dupa titlu
+12. 📖  Imprumuta publicatie
+13. 📝  Afiseaza recenziile unui cititor
+14. 📝  Afiseaza recenziile unei publicatii
+15. 🎟️  Listare evenimente
+16. 📂  Vizualizare imprumuturi active (cititor)
+17. 🗄️  Vizualizare istoric imprumuturi (cititor)
+18. 💸  Vizualizare amenzi (cititor)
+19. ➕  Adauga publicatie
+20. ❌  Sterge publicatie
+21. ✨  Creeaza eveniment
+22. 🗑️  Sterge eveniment
+23. 🔒  Blocheaza utilizator
+24. 🔓  Deblocheaza utilizator
+25. 👥  Adauga bibliotecar STAFF
+0.  🚪  Logout
+```
+
+### 🙋 Cititor
+
+```text
+1.  📚  Listare toate publicatiile
+2.  🔍  Cautare dupa titlu
+3.  🖋️  Cautare dupa autor
+4.  🏷️  Cautare dupa categorie
+5.  📅  Cautare dupa interval de ani
+6.  ✅  Cautare dupa disponibilitate
+7.  🧩  Cautare complexa
+8.  🗓️  Sorteaza dupa anul publicarii
+9.  ⭐  Sorteaza dupa rating
+10. 🔢  Sorteaza dupa nr. de imprumuturi
+11. 🔠  Sorteaza dupa titlu
+12. 📖  Imprumuta publicatie
+13. ↩️  Returneaza publicatie
+14. 📌  Rezerva publicatie
+15. 🔄  Reinnoieste imprumut
+16. ✍️  Adauga recenzie
+17. 🗣️  Afiseaza recenzii
+18. 🎟️  Listare evenimente
+19. 🖊️  Inscriere la eveniment
+20. 📂  Vizualizare imprumuturi active
+21. 🗄️  Vizualizare istoric imprumuturi
+22. 💸  Vizualizare amenzi
+0.  🚪  Logout
+```
+
+---
+
+## 🔍 Cum funcționează
+
+1. **CreeazaTabele** generează (sau resetează) schema la fiecare pornire.
+2. CLI‑ul ridică comenzi către **Service Layer**; aici se fac validările și se declanșează tranzacții JDBC.
+3. Fiecare acțiune se loghează ca eveniment → **EventBus** → **AuditService** (thread dedicat).
+4. Securitatea parolelor este asigurată de **BCrypt** (12 rounds).
+
+---
+
+## 🧰 Stack & Pattern‑uri
+
+| Stack                 | Utilizare                                                              |
+| --------------------- | ---------------------------------------------------------------------- |
+| **Java 21**           | Records · pattern matching · Stream API                                |
+| **MySQL 8 + JDBC**    | Persistență relațională ↓ CRUD                                         |
+| **BCrypt**            | Hashing parole                                                         |
+| **JUnit 5 + Mockito** | Testare                                                                |
+| **Patterns**          | Singleton · Factory · Builder · Repository · Strategy · CoR · Observer |
+
+---
+
+## 🗺️ Roadmap
+
+- 🌐 Modul **REST** (Spring Boot)
+- 🖥️ UI **React**
+- ♻️ *Hot‑reloading* cu **JRebel**
+- 🐳 **Docker** & orchestrare **Kubernetes**
+- 📈 Monitorizare **Prometheus + Grafana**
+- ☁️ Deploy **AWS / Azure**
+
+---
+
+
+
+## 📝 Licență
+
+© 2025 SmartLibrary. Toate drepturile rezervate. Este interzisă copierea, redistribuirea sau modificarea acestui software fără permisiunea scrisă a autorilor.
+
