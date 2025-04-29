@@ -43,7 +43,7 @@ public class GenericJdbcRepository<T, ID> {
 
                 try (ResultSet keys = ps.getGeneratedKeys()) {
                     if (!keys.next())
-                        throw new RuntimeException("Cheia nu a fost generată");
+                        throw new RuntimeException("Cheia nu a fost generata");
 
                     Number n = (Number) keys.getObject(1);
                     ID id = (ID) Integer.valueOf(n.intValue());
@@ -77,7 +77,7 @@ public class GenericJdbcRepository<T, ID> {
 
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (!keys.next())
-                    throw new RuntimeException("Cheia nu a fost generată");
+                    throw new RuntimeException("Cheia nu a fost generata");
 
                 Number n = (Number) keys.getObject(1);
                 ID id = (ID) Integer.valueOf(n.intValue());
@@ -85,10 +85,9 @@ public class GenericJdbcRepository<T, ID> {
                 if (obj instanceof Identifiable ident)
                     ident.setId(n.intValue());
 
-                // inserţii „secundare” (ex. tabel-copil) – reutilizăm binder-ul existent
                 binder.insertSecondary(c, obj, n.intValue());
 
-                return id;    // apelantul decide când face commit
+                return id;
             }
         }
     }

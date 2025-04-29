@@ -6,6 +6,10 @@ import exceptie.LimitaDepasitaExceptie;
 import model.*;
 import observer.EventBus;
 import audit.AuditAction;
+import util.ConnectionManager;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import java.util.*;
 
@@ -66,19 +70,43 @@ public class EvenimentService {
     public void inscrieParticipant(int idEv, Cititor c)
             throws EntitateInexistentaExceptie, LimitaDepasitaExceptie {
 
-        Eveniment e = cache.getOrDefault(idEv,
-                EvenimentServiceCrud.getInstance()
-                        .read(idEv)
+        Eveniment ev = cache.computeIfAbsent(idEv, k ->
+        {
+            try {
+                return EvenimentServiceCrud.getInstance()
+                        .read(k)
                         .orElseThrow(() ->
-                                new EntitateInexistentaExceptie("Eveniment", idEv)));
+                                new EntitateInexistentaExceptie("Eveniment", k));
+            } catch (EntitateInexistentaExceptie e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-        e.inscrieParticipant(c);
+        ev.inscrieParticipant(c);
 
-        EvenimentParticipantServiceCrud.getInstance()
-                .create(new EvenimentParticipant(idEv, c.getId()));
+        try (Connection conn = ConnectionManager.get().open()) {
+            conn.setAutoCommit(false);
 
-        EvenimentServiceCrud.getInstance().update(e);
-        cache.put(idEv, e);
+            try (PreparedStatement ins = conn.prepareStatement(
+                    "INSERT INTO eveniment_participant(eveniment_id, cititor_id) VALUES (?,?)")) {
+                ins.setInt(1, idEv);
+                ins.setInt(2, c.getId());
+                ins.executeUpdate();
+            }
+
+            try (PreparedStatement upd = conn.prepareStatement(
+                    "UPDATE eveniment SET nr_participanti=? WHERE id=?")) {
+                upd.setInt(1, ev.getNrParticipanti());
+                upd.setInt(2, idEv);
+                upd.executeUpdate();
+            }
+
+            conn.commit();
+            cache.put(idEv, ev);
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Inscriere esuata, tranzactia a fost anulata", ex);
+        }
 
         EventBus.publish(AuditAction.INSCRIERE_EVENIMENT);
     }

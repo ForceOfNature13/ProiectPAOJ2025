@@ -81,6 +81,7 @@ public class BibliotecaService {
         EventBus.publish(AuditAction.PUBLICATIE_CREATA);
     }
 
+
     public void stergePublicatie(int id) {
         CarteServiceCrud    .getInstance().delete(id);
         RevistaServiceCrud  .getInstance().delete(id);
@@ -222,10 +223,10 @@ public class BibliotecaService {
 
         Imprumut impr = new Imprumut(idPub, idCit);
         ImprumutServiceCrud.getInstance().create(impr);
-        /*
-        impr.setDataScadenta(java.time.LocalDate.now().minusDays(5));
-        ImprumutServiceCrud.getInstance().update(impr);
-        */
+        //test penalizare
+       //  impr.setDataScadenta(java.time.LocalDate.now().minusDays(5));
+      // ImprumutServiceCrud.getInstance().update(impr);
+
         try (Connection con = ConnectionManager.get().open();
              PreparedStatement ps = con.prepareStatement(
                      "UPDATE publicatie SET disponibil = 0, " +
@@ -357,17 +358,29 @@ public class BibliotecaService {
         RezervarePublicatie rez = rezervari.get(idPub);
         if (rez == null || rez.esteGoala()) return;
 
-        Cititor urmator = rez.extrageUrmatorul();
-        if (rez.esteGoala()) rezervari.remove(idPub);
+        Cititor candidat = rez.veziPrimul();
 
-        try { imprumutaPublicatie(idPub, urmator.getId()); }
-        catch (Exception e) { proceseazaRezervareLaReturnare(idPub); }
+        while (candidat != null) {
+
+            try {
+                imprumutaPublicatie(idPub, candidat.getId());
+                RezervareServiceCrud.getInstance()
+                        .delete(idPub, candidat.getId());
+
+                    rez.extrageUrmatorul();
+                if (rez.esteGoala()) rezervari.remove(idPub);
+                return;
+            }
+            catch (Exception e) {
+                RezervareServiceCrud.getInstance()
+                        .delete(idPub, candidat.getId());
+                rez.extrageUrmatorul();
+                candidat = rez.veziPrimul();
+            }
+        }
     }
 
-    public void adaugaRezervare(int idPub) {
-        rezervari.putIfAbsent(idPub, new RezervarePublicatie(idPub));
-        EventBus.publish(AuditAction.REZERVARE_ADAUGATA);
-    }
+
 
     public void rezervaPublicatie(int idPub, int idCit) throws Exception {
         Publicatie p = getPublicatieById(idPub);

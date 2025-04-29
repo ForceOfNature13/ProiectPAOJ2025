@@ -18,7 +18,6 @@ public class EvenimentServiceCrud {
                             "capacitate_max, nr_participanti) " +
                             "VALUES (?,?,?,?,?,?)",
                     "UPDATE eveniment SET " +
-                    "UPDATE eveniment SET " +
                             "titlu=?, descriere=?, data=?, locatie=?, " +
                             "capacitate_max=?, nr_participanti=? " +
                             "WHERE id = ?",

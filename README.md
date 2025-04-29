@@ -98,6 +98,12 @@ java -jar target/smartlibrary.jar
 
 ---
 
+## 📝 Decizii tehnice
+
+* Gestionarea datelor se face exclusiv prin colecții Java (`List/ArrayList`, `Map/HashMap`, `Set/HashSet`, `TreeSet`, `LinkedList`, `BlockingQueue` etc.); în consecință, cerința fallback cu array-uri 1-D / 2-D nu se mai aplică.
+
+---
+
 ## 🧩 Model de domeniu
 
 | Entitate          | Cheie                        | Tabel                  |

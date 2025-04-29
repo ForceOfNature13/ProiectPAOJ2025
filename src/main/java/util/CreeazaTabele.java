@@ -143,16 +143,17 @@ public final class CreeazaTabele {
             );
         """,
             """
-        CREATE TABLE IF NOT EXISTS eveniment_participant (
-            eveniment_id INT,
-            cititor_id   INT,
-            PRIMARY KEY(eveniment_id, cititor_id),
-            CONSTRAINT fk_ep_ev  FOREIGN KEY(eveniment_id)
-                REFERENCES eveniment(id) ON DELETE CASCADE,
-            CONSTRAINT fk_ep_cit FOREIGN KEY(cititor_id)
-                REFERENCES cititor(id)   ON DELETE CASCADE
-        );
-        """
+CREATE TABLE IF NOT EXISTS eveniment_participant (
+    eveniment_id INT,
+    cititor_id   INT,
+    PRIMARY KEY (eveniment_id, cititor_id),
+    CONSTRAINT fk_ep_ev  FOREIGN KEY (eveniment_id)
+        REFERENCES eveniment(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ep_cit FOREIGN KEY (cititor_id)
+        REFERENCES cititor(id)   ON DELETE CASCADE
+);
+"""
+
     };
 
     public static void creazaSchema() {
